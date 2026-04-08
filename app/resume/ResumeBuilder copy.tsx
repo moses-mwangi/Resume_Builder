@@ -48,14 +48,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ResumeAnalyzer } from "./ResumeAnalyzer";
 import { HeaderStyle, HeaderStyleSelector, ResumeHeader } from "./ResumeHeader";
 import { SkillsForm as SkillsForms } from "./SkillsForm";
-import { CertificatesForm } from "./forms/CertificatesForm";
-import { EducationForm } from "./forms/EducationForm";
-import { ExperienceForm } from "./forms/ExperienceForm";
-import { LanguagesForm } from "./forms/LanguagesForm";
-import { PersonalInfoForm } from "./forms/PersonalInfoForm";
-import { ProjectsForm } from "./forms/ProjectsForm";
-import { SkillsForm } from "./forms/SkillsForm";
-import { Card } from "./ui/card";
+import { CertificatesForm } from "../../components/forms/CertificatesForm";
+import { EducationForm } from "../../components/forms/EducationForm";
+import { ExperienceForm } from "../../components/forms/ExperienceForm";
+import { LanguagesForm } from "../../components/forms/LanguagesForm";
+import { PersonalInfoForm } from "../../components/forms/PersonalInfoForm";
+import { ProjectsForm } from "../../components/forms/ProjectsForm";
+import { SkillsForm } from "../../components/forms/SkillsForm";
+import { Card } from "../../components/ui/card";
 import { useReactToPrint } from "react-to-print";
 
 // Category icons mapping

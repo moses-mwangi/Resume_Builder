@@ -12,7 +12,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { PersonalInfo } from "@/types/resume";
-import { Separator } from "./ui/separator";
+import { Separator } from "../../components/ui/separator";
 
 export type HeaderStyle =
   | "minimal"

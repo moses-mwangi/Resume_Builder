@@ -47,13 +47,13 @@ import { HeaderStyle } from "./ResumeHeader";
 import { ResumePreview } from "./ResumePreview";
 import { ResumePreviewImproved } from "./ResumePreviewImproved";
 import { SkillsForm as SkillsForms } from "./SkillsForm";
-import { CertificatesForm } from "./forms/CertificatesForm";
-import { EducationForm } from "./forms/EducationForm";
-import { ExperienceForm } from "./forms/ExperienceForm";
-import { LanguagesForm } from "./forms/LanguagesForm";
-import { PersonalInfoForm } from "./forms/PersonalInfoForm";
-import { ProjectsForm } from "./forms/ProjectsForm";
-import { SkillsForm } from "./forms/SkillsForm";
+import { CertificatesForm } from "../../components/forms/CertificatesForm";
+import { EducationForm } from "../../components/forms/EducationForm";
+import { ExperienceForm } from "../../components/forms/ExperienceForm";
+import { LanguagesForm } from "../../components/forms/LanguagesForm";
+import { PersonalInfoForm } from "../../components/forms/PersonalInfoForm";
+import { ProjectsForm } from "../../components/forms/ProjectsForm";
+import { SkillsForm } from "../../components/forms/SkillsForm";
 import { PDFExporter } from "./PDFExporter";
 import { downloadPDF } from "@/lib/pdf-generator";
 
@@ -701,12 +701,12 @@ export function ResumeBuilder() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 p-6">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* ================= HEADER ================= */}
           <div className="flex justify-between items-center flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Resume Builder
               </h1>
 
@@ -785,9 +785,9 @@ export function ResumeBuilder() {
                 onClick={() =>
                   setSelectedTemplate(key as keyof typeof templates)
                 }
-                className={`flex-1 rounded-none h-10 border-b-2 ${
+                className={`flex-1 rounded-none h-10 cursor-pointer border-b-2 ${
                   selectedTemplate === key
-                    ? "border-purple-600 text-purple-600 bg-gray-50 dark:bg-slate-700"
+                    ? "border-purple-600  text-purple-600 bg-gray-50 dark:bg-slate-700"
                     : "border-transparent"
                 }`}
               >
@@ -802,7 +802,7 @@ export function ResumeBuilder() {
             <Button
               variant="ghost"
               onClick={() => setBuilderMode("manual")}
-              className={`flex-1 rounded-none h-10 border-b-2 ${
+              className={`flex-1 cursor-pointer rounded-none h-10 border-b-2 ${
                 builderMode === "manual"
                   ? "border-blue-600 text-blue-600 bg-gray-50 dark:bg-slate-700"
                   : "border-transparent"
@@ -815,7 +815,7 @@ export function ResumeBuilder() {
             <Button
               variant="ghost"
               onClick={() => setBuilderMode("analyzer")}
-              className={`flex-1 rounded-none h-10 border-b-2 ${
+              className={`flex-1 cursor-pointer rounded-none h-10 border-b-2 ${
                 builderMode === "analyzer"
                   ? "border-blue-600 text-blue-600 bg-gray-50 dark:bg-slate-700"
                   : "border-transparent"
@@ -838,7 +838,7 @@ export function ResumeBuilder() {
                 <Button
                   variant="ghost"
                   onClick={() => setViewMode("edit")}
-                  className={`flex-1 rounded-none h-10 border-b-2 ${
+                  className={`flex-1 cursor-pointer rounded-none h-10 border-b-2 ${
                     viewMode === "edit"
                       ? "border-blue-600 text-blue-600 bg-gray-50 dark:bg-slate-700"
                       : "border-transparent"
@@ -854,7 +854,7 @@ export function ResumeBuilder() {
                     setViewMode("preview");
                     validatePersonalInfo();
                   }}
-                  className={`flex-1 rounded-none h-10 border-b-2 ${
+                  className={`flex-1 cursor-pointer rounded-none h-10 border-b-2 ${
                     viewMode === "preview"
                       ? "border-blue-600 text-blue-600 bg-gray-50 dark:bg-slate-700"
                       : "border-transparent"
@@ -885,7 +885,7 @@ export function ResumeBuilder() {
                             key={section.id}
                             variant="ghost"
                             onClick={() => setActiveSection(section.id)}
-                            className={`w-full justify-start h-10 ${
+                            className={`w-full cursor-pointer justify-start h-10 ${
                               activeSection === section.id
                                 ? "bg-blue-600 text-white"
                                 : "hover:bg-gray-100 dark:hover:bg-slate-700"

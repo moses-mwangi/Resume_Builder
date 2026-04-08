@@ -21,7 +21,7 @@ import {
   Zap,
 } from "lucide-react";
 import { ResumeData, ResumeAnalysis } from "@/types/resume";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "../../components/ui/textarea";
 
 interface ResumeAnalyzerProps {
   onImport: (data: Partial<ResumeData>) => void;

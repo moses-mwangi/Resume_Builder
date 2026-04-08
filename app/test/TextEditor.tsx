@@ -363,7 +363,7 @@ function RichTextEditor({ data, onUpdate }: RichTextEditorProps) {
           size="sm"
           onClick={GenerateSummaryFromAI}
           disabled={loading}
-          className="gap-2 border-primary text-primary hover:bg-primary/10"
+          className="gap-2 border-primary-o text-primary-p hover:bg-primary-p/10"
         >
           {loading ? (
             <>

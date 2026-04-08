@@ -20,7 +20,7 @@ export const ExperienceForm = ({
   >
     <div className="flex justify-between items-center">
       <h3 className="text-lg font-semibold">Work Experience</h3>
-      <Button onClick={onAdd} className="flex items-center gap-2">
+      <Button onClick={onAdd} className="flex bg-blue-600 items-center gap-2">
         <Plus className="w-4 h-4" />
         Add Experience
       </Button>

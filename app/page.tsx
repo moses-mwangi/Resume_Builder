@@ -1,132 +1,14 @@
-// "use client";
-
-// import { AtomIcon, Edit, FileText, Sparkles } from "lucide-react";
-
-// function Home() {
-//   return (
-//     <main className="bg-gradient-to-b from-white to-gray-50 min-h-screen">
-//       {/* HERO SECTION */}
-//       <section className="py-20 px-6 text-center max-w-5xl mx-auto">
-//         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-//           Create a Job-Winning Resume <br />
-//           <span className="text-primary">in Minutes</span>
-//         </h1>
-
-//         <p className="mt-6 text-gray-600 text-lg max-w-2xl mx-auto">
-//           Build professional resumes and cover letters with AI. Save time, stand
-//           out, and land more interviews — effortlessly.
-//         </p>
-
-//         <div className="mt-8 flex justify-center gap-4 flex-wrap">
-//           <a
-//             href="/dashboard"
-//             className="px-6 py-3 rounded-lg bg-primary text-white font-medium shadow hover:scale-105 transition"
-//           >
-//             Get Started Free
-//           </a>
-
-//           <a
-//             href="#features"
-//             className="px-6 py-3 rounded-lg border text-gray-700 hover:bg-gray-100 transition"
-//           >
-//             See Features
-//           </a>
-//         </div>
-//       </section>
-
-//       {/* FEATURES */}
-//       <section
-//         id="features"
-//         className="py-16 px-6 max-w-6xl mx-auto grid gap-8 md:grid-cols-3"
-//       >
-//         <div className="p-6 rounded-2xl bg-white shadow-sm border hover:shadow-md transition">
-//           <AtomIcon className="w-8 h-8 text-primary mb-4" />
-//           <h3 className="font-semibold text-lg">AI Resume Generator</h3>
-//           <p className="text-sm text-gray-600 mt-2">
-//             Instantly generate professional summaries, experience, and skills
-//             tailored to your role.
-//           </p>
-//         </div>
-
-//         <div className="p-6 rounded-2xl bg-white shadow-sm border hover:shadow-md transition">
-//           <Edit className="w-8 h-8 text-primary mb-4" />
-//           <h3 className="font-semibold text-lg">Smart Editor</h3>
-//           <p className="text-sm text-gray-600 mt-2">
-//             Easily edit and customize your resume with a clean and simple
-//             interface.
-//           </p>
-//         </div>
-
-//         <div className="p-6 rounded-2xl bg-white shadow-sm border hover:shadow-md transition">
-//           <FileText className="w-8 h-8 text-primary mb-4" />
-//           <h3 className="font-semibold text-lg">Cover Letters</h3>
-//           <p className="text-sm text-gray-600 mt-2">
-//             Create personalized cover letters in seconds to match your resume.
-//           </p>
-//         </div>
-//       </section>
-
-//       {/* HOW IT WORKS */}
-//       <section className="py-20 px-6 bg-white">
-//         <div className="max-w-5xl mx-auto text-center">
-//           <h2 className="text-3xl font-bold">How It Works</h2>
-//           <p className="text-gray-500 mt-2">
-//             Simple steps to build your perfect resume
-//           </p>
-
-//           <div className="grid md:grid-cols-3 gap-10 mt-12 text-left">
-//             <div>
-//               <span className="text-primary font-bold text-xl">01</span>
-//               <h3 className="font-semibold mt-2">Enter Your Details</h3>
-//               <p className="text-sm text-gray-600 mt-1">
-//                 Add your job title, skills, and experience.
-//               </p>
-//             </div>
-
-//             <div>
-//               <span className="text-primary font-bold text-xl">02</span>
-//               <h3 className="font-semibold mt-2">Generate with AI</h3>
-//               <p className="text-sm text-gray-600 mt-1">
-//                 Let AI create professional content for you instantly.
-//               </p>
-//             </div>
-
-//             <div>
-//               <span className="text-primary font-bold text-xl">03</span>
-//               <h3 className="font-semibold mt-2">Download & Apply</h3>
-//               <p className="text-sm text-gray-600 mt-1">
-//                 Export your resume and start applying to jobs.
-//               </p>
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* CTA */}
-//       <section className="py-20 px-6 text-center bg-gradient-to-r from-primary to-purple-600 text-white">
-//         <h2 className="text-3xl font-bold">Ready to Build Your Resume?</h2>
-
-//         <p className="mt-3 text-white/80">
-//           Start creating your resume and cover letter today — it's free.
-//         </p>
-
-//         <a
-//           href="/dashboard"
-//           className="inline-block mt-6 px-8 py-3 bg-white text-black rounded-lg font-medium hover:scale-105 transition"
-//         >
-//           Get Started Now
-//         </a>
-//       </section>
-//     </main>
-//   );
-// }
-
-// export default Home;
-
 "use client";
 
 import { useState } from "react";
-import { Sparkles, FileText, Copy } from "lucide-react";
+import {
+  Sparkles,
+  FileText,
+  Copy,
+  Video,
+  ArrowRight,
+  Check,
+} from "lucide-react";
 
 export default function Home() {
   const [role, setRole] = useState("");
@@ -151,31 +33,11 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      {/* HEADER */}
-      <header className="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto">
-        <h1 className="font-bold text-xl">AI Resume Builder</h1>
-
-        <nav className="flex gap-6 text-sm">
-          <a href="#demo" className="hover:text-primary">
-            Demo
-          </a>
-          <a href="#preview" className="hover:text-primary">
-            Preview
-          </a>
-          <a
-            href="/dashboard"
-            className="bg-primary text-white px-4 py-2 rounded-lg"
-          >
-            Get Started
-          </a>
-        </nav>
-      </header>
-
+    <main className="min-h-screen bg-linear-to-b from-white to-gray-50">
       {/* HERO */}
       <section className="text-center py-16 px-6 max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-6xl font-extrabold">
-          Build Your Resume with <span className="text-primary">AI</span>
+          Build Your Resume with <span className="text-primary-p">AI</span>
         </h1>
 
         <p className="mt-4 text-gray-600">
@@ -187,7 +49,7 @@ export default function Home() {
       <section id="demo" className="py-12 px-6 max-w-4xl mx-auto">
         <div className="bg-white p-6 rounded-2xl shadow border">
           <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="text-primary" />
+            <Sparkles className="text-primary-p" />
             <h2 className="font-semibold">Try AI Generator</h2>
           </div>
 
@@ -201,7 +63,7 @@ export default function Home() {
 
             <button
               onClick={handleGenerate}
-              className="bg-primary text-white px-4 py-2 rounded-lg"
+              className="bg-primary-p text-white px-4 py-2 rounded-lg"
             >
               Generate
             </button>
@@ -304,20 +166,68 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 text-center bg-primary text-white">
-        <h2 className="text-3xl font-bold">Start Building Today</h2>
+      <section className="relative py-16 text-center bg-primary-p text-white">
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 border border-white/20">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-medium text-white">Free Forever</span>
+          </div>
 
-        <p className="mt-2 text-white/80">
-          Your next job starts with a better resume
-        </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Start Building Your Dream Career
+          </h2>
 
-        <a
-          href="/dashboard"
-          className="inline-block mt-6 bg-white text-black px-6 py-3 rounded-lg font-medium"
-        >
-          Get Started Free
-        </a>
+          <p className="mt-2 mb-6 text-white/80 md:text-lg max-w-3xl mx-auto">
+            Your next job starts with a better resume. Join thousands of
+            successful job seekers who landed their dream roles.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a
+              href="/dashboard"
+              className="group text-[15px] relative inline-flex items-center gap-2 bg-white text-gray-900 px-6 py-3 rounded-xl font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 active:scale-95 overflow-hidden"
+            >
+              <span className="relative z-10">Get Started Free</span>
+
+              <ArrowRight className="h-4.5 w-4.5" />
+              <div className="absolute inset-0 bg-linear-to-r from-gray-100 to-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
+
+            <a
+              href="#demo"
+              className="inline-flex text-[15px] items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 border border-white/20 hover:scale-105 active:scale-95"
+            >
+              <Video className="w-5 h-5" />
+              Watch Demo
+            </a>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="mt-12 pt-8 border-t border-white/20">
+            <p className="text-sm text-white/70 mb-4">
+              Trusted by 10,000+ job seekers
+            </p>
+            <div className="flex justify-center gap-6 text-white/60 text-sm">
+              <div className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-white/65" />
+                <span>ATS-Friendly</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-white/65" />
+                <span>Export to PDF</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-white/65" />
+                <span>Free Templates</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

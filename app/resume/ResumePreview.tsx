@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { HeaderStyle, HeaderStyleSelector, ResumeHeader } from "./ResumeHeader";
-import { Card } from "./ui/card";
+import { Card } from "../../components/ui/card";
 
 // Category icons mapping
 const categoryIcons: Record<string, any> = {

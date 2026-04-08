@@ -141,7 +141,6 @@
 
     --accent-foreground: oklch(0.985 0 0);
 
-
     --destructive-foreground: oklch(0.985 0 0);
     --destructive: oklch(0.704 0.191 22.216);
 
@@ -185,5 +184,114 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+  }
+
+  .glass-effect {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  .skill-progress {
+    @apply relative overflow-hidden bg-gray-200 rounded-full h-2;
+  }
+
+  .skill-progress::after {
+    content: "";
+    @apply absolute top-0 left-0 h-full bg-linear-to-r from-blue-500 to-purple-500 rounded-full;
+    animation: progress-fill 2s ease-out forwards;
+  }
+
+  @keyframes progress-fill {
+    from {
+      width: 0;
+    }
+    to {
+      width: var(--progress);
+    }
+  }
+
+  .floating {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .glow-effect {
+    @apply shadow-lg;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+
+  .timeline-dot {
+    @apply w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-lg;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:scale-102;
+  }
+}
+.break-inside-avoid {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.print\:hidden {
+  display: block;
+}
+
+@media print {
+  /* Hide everything */
+  body * {
+    visibility: hidden;
+    margin: 0;
+  }
+
+  @page {
+    margin: 0;
+  }
+
+  /* Show only resume */
+  .resume-print-area,
+  .resume-print-area * {
+    visibility: visible;
+  }
+
+  /* Move resume to top-left */
+  .resume-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+  .print\:hidden {
+    display: none;
   }
 }
