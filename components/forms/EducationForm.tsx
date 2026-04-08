@@ -1,0 +1,128 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Education
+} from "@/types/resume";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Plus,
+  Trash2
+} from "lucide-react";
+
+export const EducationForm = ({
+  education,
+  onUpdate,
+  onDelete,
+  onAdd,
+}: any) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    className="space-y-6"
+  >
+    <div className="flex justify-between items-center">
+      <h3 className="text-lg font-semibold">Education</h3>
+      <Button onClick={onAdd} className="flex items-center gap-2">
+        <Plus className="w-4 h-4" />
+        Add Education
+      </Button>
+    </div>
+
+    <AnimatePresence>
+      {education.map((edu: Education, index: number) => (
+        <motion.div
+          key={edu.id}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 20 }}
+          className="border rounded-lg p-4 space-y-4 bg-card"
+        >
+          <div className="flex justify-between items-start">
+            <h4 className="font-medium">Education {index + 1}</h4>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => onDelete(edu.id)}
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Institution</Label>
+              <Input
+                value={edu.institution}
+                onChange={(e) =>
+                  onUpdate(edu.id, "institution", e.target.value)
+                }
+                placeholder="University Name"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>Degree</Label>
+              <Input
+                value={edu.degree}
+                onChange={(e) => onUpdate(edu.id, "degree", e.target.value)}
+                placeholder="Bachelor's, Master's, etc."
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>Field of Study</Label>
+              <Input
+                value={edu.field}
+                onChange={(e) => onUpdate(edu.id, "field", e.target.value)}
+                placeholder="Computer Science, Business, etc."
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>GPA</Label>
+              <Input
+                value={edu.gpa}
+                onChange={(e) => onUpdate(edu.id, "gpa", e.target.value)}
+                placeholder="3.8/4.0"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>Start Date</Label>
+              <Input
+                type="month"
+                value={edu.startDate}
+                onChange={(e) => onUpdate(edu.id, "startDate", e.target.value)}
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>End Date</Label>
+              <Input
+                type="month"
+                value={edu.endDate}
+                onChange={(e) => onUpdate(edu.id, "endDate", e.target.value)}
+                disabled={edu.current}
+                className="mt-1"
+              />
+            </div>
+            <div className="flex items-center space-x-2 mt-6">
+              <input
+                type="checkbox"
+                id={`current-edu-${edu.id}`}
+                checked={edu.current}
+                onChange={(e) => onUpdate(edu.id, "current", e.target.checked)}
+                className="rounded"
+              />
+              <Label htmlFor={`current-edu-${edu.id}`}>
+                Currently studying
+              </Label>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </AnimatePresence>
+  </motion.div>
+);

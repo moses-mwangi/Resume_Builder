@@ -1,19 +1,15 @@
 import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Your Portfolio - Your Name",
   description:
     "A portfolio showcasing web development projects with Next.js, React, and more.",
-  keywords: "portfolio, web development, React, Next.js, developer",
-  authors: [
-    { name: "Your Name", url: "https://portfolio-test-ecru.vercel.app/" },
-  ],
-  creator: "Your Name",
-  viewport: "width=device-width, initial-scale=1",
-  robots: "index, follow", // Allows search engines to index your site
-  themeColor: "#000000", // Customize the theme color
 };
 
 export default function RootLayout({
@@ -22,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <head>
         {/* Meta Tags for SEO and Social Sharing */}
         <meta
