@@ -1709,7 +1709,7 @@ const LetterPreview = ({
   selectedTemplate,
 }: Preview) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
       <div className="max-w-5xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
           <div className="flex gap-2">
@@ -1792,6 +1792,7 @@ export default function CoverLetterBuilder() {
     "saved",
   );
   const [showPreview, setShowPreview] = useState(false);
+  // const previewRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const steps = [
@@ -1968,7 +1969,7 @@ export default function CoverLetterBuilder() {
             exportToPDF={exportToPDF}
             exportSuccess={exportSuccess}
             isExporting={isExporting}
-            previewRef={previewRef}
+            previewRef={previewRef as RefObject<HTMLDivElement>}
             letterData={letterData}
             selectedTemplate={selectedTemplate}
           />
@@ -1980,11 +1981,11 @@ export default function CoverLetterBuilder() {
 
   if (showPreview) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
         <div className="max-w-5xl mx-auto space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Cover Letter Preview
               </h1>
               <p className="text-gray-600 mt-1">
@@ -2025,11 +2026,11 @@ export default function CoverLetterBuilder() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Cover Letter Builder
           </h1>
           <p className="text-gray-600 mt-2">
