@@ -3,16 +3,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {
   Award,
   Briefcase,
   CheckCircle,
-  ChevronRight,
   Download,
   Edit,
   Eye,
@@ -20,10 +17,8 @@ import {
   FolderOpen,
   Globe,
   GraduationCap,
-  LayoutTemplate,
   LucideLayoutGrid,
   RefreshCw,
-  Save,
   User,
   Wrench,
 } from "lucide-react";
@@ -189,7 +184,12 @@ const LivePreview = ({
   );
 };
 
-const initialData: ResumeData = {
+// const initialResumeData: ResumeData = {
+export const initialResumeData: ResumeData = {
+  id: crypto.randomUUID(),
+  title: "",
+  role: "",
+  date: Date.now(),
   personalInfo: {
     fullName: "",
     email: "",
@@ -211,7 +211,7 @@ const initialData: ResumeData = {
 };
 
 export default function ResumeBuilder() {
-  const [resumeData, setResumeData] = useState<ResumeData>(initialData);
+  const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [selectedTemplate, setSelectedTemplate] =
     useState<keyof typeof resumeTemplates>("modern");
 
@@ -231,7 +231,7 @@ export default function ResumeBuilder() {
     "manual",
   );
   const [viewMode, setViewMode] = useState<"edit" | "preview">("edit");
-  const [history, setHistory] = useState<ResumeData[]>([initialData]);
+  const [history, setHistory] = useState<ResumeData[]>([initialResumeData]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const resumeRef = useRef<HTMLDivElement>(null);
 
@@ -261,6 +261,29 @@ export default function ResumeBuilder() {
   useEffect(() => {
     const saveTimeout = setTimeout(() => {
       localStorage.setItem("resumeData", JSON.stringify(resumeData));
+      // setSaveStatus("saved");
+
+      // const existing = localStorage.getItem("resumeData");
+      const existing = localStorage.getItem("resumeDataArray");
+
+      let resumesArray = [];
+
+      if (existing) {
+        try {
+          resumesArray = JSON.parse(existing);
+        } catch (e) {
+          resumesArray = [];
+        }
+      }
+      // Ensure it's an array
+      if (!Array.isArray(resumesArray)) {
+        resumesArray = [];
+      }
+
+      // Push new data
+      resumesArray.push(resumeData);
+
+      localStorage.setItem("resumeDataArray", JSON.stringify(resumesArray));
       setSaveStatus("saved");
     }, 500);
 
@@ -282,6 +305,10 @@ export default function ResumeBuilder() {
 
   const handleImportFromAnalyzer = (importedData: Partial<ResumeData>) => {
     const mergedData: ResumeData = {
+      title: "",
+      role: "",
+      date: Date.now(),
+      id: crypto.randomUUID(),
       personalInfo: {
         ...resumeData.personalInfo,
         ...importedData.personalInfo,
@@ -912,6 +939,9 @@ export default function ResumeBuilder() {
             label={"Resume Builder"}
             letterTemplates={letterTemplates}
             navItems={navItems}
+            currentView={() => {
+              setShowPreview((prev) => false);
+            }}
           />
 
           <div className="flex-1 space-y-6">

@@ -77,6 +77,11 @@ export interface Language {
 }
 
 export interface ResumeData {
+  id: string;
+  title: string;
+  role: string;
+  date: string | number;
+  /////
   personalInfo: PersonalInfo;
   experience: Experience[];
   education: Education[];

@@ -28,9 +28,11 @@ const SidebarNav = ({
   letterTemplates,
   navItems,
   label,
+  currentView,
 }: {
   activeSection: string;
   label: string;
+  currentView?: any;
   onSectionChange: (section: string) => void;
   completionPercentage: number;
   letterTemplates: {
@@ -224,7 +226,10 @@ const SidebarNav = ({
                 return (
                   <button
                     key={item.id}
-                    onClick={() => onSectionChange(item.id)}
+                    onClick={() => {
+                      onSectionChange(item.id);
+                      currentView();
+                    }}
                     className={cn(
                       "w-full flex cursor-pointer items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 border border-transparent",
                       colorClasses[item.color as keyof typeof colorClasses],

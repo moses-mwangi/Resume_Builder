@@ -1,49 +1,37 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  FileText,
-  Download,
-  Printer,
-  Eye,
-  Edit,
-  Sparkles,
-  CheckCircle,
-  User,
-  Building,
-  Mail,
-  Phone,
-  MapPin,
-  RefreshCw,
-  Star,
-  Zap,
-  ChevronRight,
-  ChevronLeft,
-  MessageSquare,
-  Settings,
-  Check,
-  Save,
-  LayoutTemplate,
-  Send,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { cn } from "@/lib/utils";
-import SidebarNav from "../resume/Shared-SideNav";
+import {
+  ArrowLeft,
+  Building,
+  CheckCircle,
+  Download,
+  Edit,
+  Eye,
+  FileText,
+  MessageSquare,
+  RefreshCw,
+  Settings,
+  Sparkles,
+  User,
+} from "lucide-react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import SidebarNav from "../../resume/Shared-SideNav";
 
 // Types
 interface CoverLetterData {
+  id?: number;
+  title?: string;
   personalInfo: {
     fullName: string;
     email: string;
@@ -74,6 +62,8 @@ interface CoverLetterData {
     availableFrom: string;
     salaryExpectation: string;
   };
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface Address {
@@ -214,7 +204,6 @@ const LivePreview = ({
                     </span>
                   )}
                   {data.personalInfo.phone && (
-                    // <span>• {data.personalInfo.phone}</span>
                     <span className="text-sm font-medium ">
                       {data.personalInfo.phone}
                     </span>
@@ -255,14 +244,12 @@ const LivePreview = ({
             )}
           </div>
 
-          {/* Subject line (optional but professional) */}
           {data.letter.subject && (
             <div className="mb-6 text-sm font-semibold">
               RE: {data.letter.subject}
             </div>
           )}
 
-          {/* Salutation */}
           <div className="mb-6">
             <p>Dear {data.recipient.hiringManager || "Hiring Manager"},</p>
           </div>
@@ -558,6 +545,10 @@ const AdditionalSection = ({
 
 // Main Component
 export default function CoverLetterBuilder() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id as string;
+
   const [letterData, setLetterData] = useState<CoverLetterData>({
     personalInfo: {
       fullName: "",
@@ -598,36 +589,116 @@ export default function CoverLetterBuilder() {
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving">("saved");
   const [showPreview, setShowPreview] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  // Calculate completion percentage
-  const completionPercentage = (() => {
-    let total = 0;
-    let filled = 0;
-    if (letterData.personalInfo.fullName) filled++;
-    if (letterData.personalInfo.email) filled++;
-    if (letterData.recipient.companyName) filled++;
-    if (letterData.letter.position) filled++;
-    if (letterData.letter.opening) filled++;
-    if (letterData.letter.body) filled++;
-    total = 6;
-    return Math.round((filled / total) * 100);
-  })();
-
-  // Load/Save to localStorage
+  // Load cover letter data by ID
   useEffect(() => {
-    const saved = localStorage.getItem("coverLetterData");
-    if (saved) setLetterData(JSON.parse(saved));
-  }, []);
+    const loadCoverLetter = async () => {
+      setIsLoading(true);
+      try {
+        // Try to load from localStorage first (for demo)
+        const savedLetters = localStorage.getItem("coverLetters");
+        if (savedLetters) {
+          const allLetters = JSON.parse(savedLetters);
+          const foundLetter = allLetters.find(
+            (l: any) => l.id === parseInt(id),
+          );
 
+          if (foundLetter) {
+            // Populate the form with saved data
+            setLetterData({
+              personalInfo: {
+                fullName: foundLetter.personalInfo?.fullName || "",
+                email: foundLetter.personalInfo?.email || "",
+                phone: foundLetter.personalInfo?.phone || "",
+                location: foundLetter.personalInfo?.location || "",
+                linkedin: foundLetter.personalInfo?.linkedin || "",
+                portfolio: foundLetter.personalInfo?.portfolio || "",
+                title: foundLetter.personalInfo?.title || "",
+              },
+              recipient: {
+                companyName:
+                  foundLetter.recipient?.companyName ||
+                  foundLetter.company ||
+                  "",
+                hiringManager: foundLetter.recipient?.hiringManager || "",
+                companyAddress: foundLetter.recipient?.companyAddress || "",
+                recipientEmail: foundLetter.recipient?.recipientEmail || "",
+              },
+              letter: {
+                position: foundLetter.letter?.position || "",
+                subject: foundLetter.letter?.subject || "",
+                opening: foundLetter.letter?.opening || "",
+                body: foundLetter.letter?.body || "",
+                closing: foundLetter.letter?.closing || "",
+                signature: foundLetter.letter?.signature || "",
+              },
+              additional: {
+                referral: foundLetter.additional?.referral || "",
+                portfolioLink: foundLetter.additional?.portfolioLink || "",
+                availableFrom: foundLetter.additional?.availableFrom || "",
+                salaryExpectation:
+                  foundLetter.additional?.salaryExpectation || "",
+              },
+              id: foundLetter.id,
+              title: foundLetter.title,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error loading cover letter:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      loadCoverLetter();
+    } else {
+      setIsLoading(false);
+    }
+  }, [id]);
+
+  // Auto-save to localStorage
   useEffect(() => {
-    const saveTimeout = setTimeout(() => {
-      localStorage.setItem("coverLetterData", JSON.stringify(letterData));
-      setSaveStatus("saved");
-    }, 500);
-    setSaveStatus("saving");
-    return () => clearTimeout(saveTimeout);
-  }, [letterData]);
+    if (!isLoading && id) {
+      const saveTimeout = setTimeout(() => {
+        // Save to individual letter storage
+        localStorage.setItem(`coverLetter-${id}`, JSON.stringify(letterData));
+
+        // Also update the main coverLetters array
+        const savedLetters = localStorage.getItem("coverLetters");
+        let allLetters = savedLetters ? JSON.parse(savedLetters) : [];
+
+        const existingIndex = allLetters.findIndex(
+          (l: any) => l.id === parseInt(id),
+        );
+        const updatedLetter = {
+          id: parseInt(id),
+          title: letterData.letter.position || "Untitled Cover Letter",
+          company: letterData.recipient.companyName,
+          personalInfo: letterData.personalInfo,
+          recipient: letterData.recipient,
+          letter: letterData.letter,
+          additional: letterData.additional,
+          updatedAt: new Date().toISOString(),
+        };
+
+        if (existingIndex >= 0) {
+          allLetters[existingIndex] = updatedLetter;
+        } else {
+          allLetters.push(updatedLetter);
+        }
+
+        localStorage.setItem("coverLetters", JSON.stringify(allLetters));
+        setSaveStatus("saved");
+      }, 500);
+
+      setSaveStatus("saving");
+      return () => clearTimeout(saveTimeout);
+    }
+  }, [letterData, id, isLoading]);
 
   const updatePersonalInfo = (field: string, value: string) =>
     setLetterData((prev) => ({
@@ -679,12 +750,11 @@ export default function CoverLetterBuilder() {
   const exportToPDF = async () => {
     console.log("Starting PDF export...");
 
-    // Create a temporary container for the letter content
     const tempContainer = document.createElement("div");
     tempContainer.style.position = "fixed";
     tempContainer.style.top = "0";
     tempContainer.style.left = "0";
-    tempContainer.style.width = "210mm"; // A4 width
+    tempContainer.style.width = "210mm";
     tempContainer.style.backgroundColor = "white";
     tempContainer.style.zIndex = "9999";
     tempContainer.style.padding = "20px";
@@ -694,23 +764,16 @@ export default function CoverLetterBuilder() {
 
     setIsExporting(true);
     try {
-      // Convert template colors to safe hex values
       const getSafeColor = (color: string) => {
-        // If it's already a hex or rgb color, return as-is
         if (color.startsWith("#") || color.startsWith("rgb")) {
           return color;
         }
-
-        // Handle lab/oklab color functions - convert to safe hex values
         if (color.includes("lab(") || color.includes("oklab(")) {
-          // Map template primary colors to safe hex equivalents
           const templateColorMap: { [key: string]: string } = {
-            professional: "#1e293b", // dark slate
-            modern: "#3b82f6", // blue
-            creative: "#8b5cf6", // purple
+            professional: "#1e293b",
+            modern: "#3b82f6",
+            creative: "#8b5cf6",
           };
-
-          // Find the template key that matches the color
           for (const [templateName, template] of Object.entries(
             letterTemplates,
           )) {
@@ -718,22 +781,14 @@ export default function CoverLetterBuilder() {
               return templateColorMap[templateName] || "#000000";
             }
           }
-
-          // Fallback: if we can't map it, use black
           return "#000000";
         }
-
-        // Fallback for any other unsupported formats
         return color.startsWith("#") ? color : "#000000";
       };
 
       const originalColor = letterTemplates[selectedTemplate].primaryColor;
       const safePrimaryColor = getSafeColor(originalColor);
 
-      console.log("Original color:", originalColor);
-      console.log("Safe color:", safePrimaryColor);
-
-      // Create the letter content in the temporary container
       tempContainer.innerHTML = `
         <div style="font-family: ${letterTemplates[selectedTemplate].font}; color: #000; background: white; padding: 20px;">
           <div style="margin-bottom: 20px;">
@@ -782,8 +837,6 @@ export default function CoverLetterBuilder() {
         </div>
       `;
 
-      console.log("Letter content created in temporary container");
-
       const letterElement = tempContainer.firstElementChild as HTMLElement;
       if (!letterElement) {
         throw new Error("Letter content not found");
@@ -815,22 +868,41 @@ export default function CoverLetterBuilder() {
       setTimeout(() => setExportSuccess(false), 3000);
     } catch (error) {
       console.error("PDF Export Error:", error);
-      console.error(
-        "Error details:",
-        error instanceof Error ? error.message : String(error),
-      );
-      // Show user-friendly error message
       alert(
-        `Failed to export PDF: ${error instanceof Error ? error.message : "Unknown error"}. Please try again or contact support.`,
+        `Failed to export PDF: ${error instanceof Error ? error.message : "Unknown error"}. Please try again.`,
       );
     } finally {
-      // Clean up the temporary container
       if (tempContainer && tempContainer.parentNode) {
         document.body.removeChild(tempContainer);
       }
       setIsExporting(false);
     }
   };
+
+  // Calculate completion percentage
+  const completionPercentage = (() => {
+    let total = 0;
+    let filled = 0;
+    if (letterData.personalInfo.fullName) filled++;
+    if (letterData.personalInfo.email) filled++;
+    if (letterData.recipient.companyName) filled++;
+    if (letterData.letter.position) filled++;
+    if (letterData.letter.opening) filled++;
+    if (letterData.letter.body) filled++;
+    total = 6;
+    return Math.round((filled / total) * 100);
+  })();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading cover letter...</p>
+        </div>
+      </div>
+    );
+  }
 
   const renderSection = () => {
     switch (activeSection) {
@@ -871,6 +943,39 @@ export default function CoverLetterBuilder() {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-6">
+        {/* Header with back button */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Link>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {letterData.letter.position || "Cover Letter Builder"}
+              </h1>
+              {letterData.recipient.companyName && (
+                <p className="text-gray-500 mt-1">
+                  for {letterData.recipient.companyName}
+                </p>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {saveStatus === "saving" && (
+                <span className="text-xs text-gray-500">Saving...</span>
+              )}
+              {saveStatus === "saved" && (
+                <span className="text-xs text-green-600 flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3" /> Saved
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Mobile Menu Toggle */}
         <div className="lg:hidden mb-4">
           <Button
@@ -885,10 +990,8 @@ export default function CoverLetterBuilder() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar - Responsive */}
-          <div
-          // className={`lg:w-72 ${mobileMenuOpen ? "block" : "hidden lg:block"}`}
-          >
+          {/* Sidebar */}
+          <div className={mobileMenuOpen ? "block" : "hidden lg:block"}>
             <SidebarNav
               activeSection={activeSection}
               onSectionChange={setActiveSection}
@@ -902,8 +1005,7 @@ export default function CoverLetterBuilder() {
             />
           </div>
 
-          {/* Main Content - Split View */}
-
+          {/* Main Content */}
           <div className="flex-1 space-y-6 min-w-0">
             {/* Template Selector Bar */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
@@ -922,7 +1024,7 @@ export default function CoverLetterBuilder() {
                   </Button>
                 ))}
               </div>
-              <div className="flex gap-2 ">
+              <div className="flex gap-2">
                 <Button
                   className="cursor-pointer"
                   variant="outline"
@@ -965,7 +1067,7 @@ export default function CoverLetterBuilder() {
               </div>
             </div>
 
-            {/* Two Column Layout */}
+            {/* Content Area */}
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
               {showPreview ? (
                 <Card className="lg:sticky px-4 lg:px-12 top-6 h-[calc(100vh-160px)]">
