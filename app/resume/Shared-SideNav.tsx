@@ -27,8 +27,10 @@ const SidebarNav = ({
   completionPercentage,
   letterTemplates,
   navItems,
+  label,
 }: {
   activeSection: string;
+  label: string;
   onSectionChange: (section: string) => void;
   completionPercentage: number;
   letterTemplates: {
@@ -150,7 +152,7 @@ const SidebarNav = ({
             <div className="mb-6 p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
               <div className="flex items-center gap-2 text-white">
                 <FileText className="w-5 h-5" />
-                <span className="font-semibold">Resume Builder</span>
+                <span className="font-semibold">{label}</span>
               </div>
             </div>
           )}

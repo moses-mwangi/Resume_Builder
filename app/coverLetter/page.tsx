@@ -40,6 +40,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { cn } from "@/lib/utils";
+import SidebarNav from "../resume/Shared-SideNav";
 
 // Types
 interface CoverLetterData {
@@ -131,131 +132,22 @@ const aiSuggestions = {
   ],
 };
 
-// Sidebar Navigation
-const SidebarNav = ({
-  activeSection,
-  onSectionChange,
-  completionPercentage,
-}: {
-  activeSection: string;
-  onSectionChange: (section: string) => void;
-  completionPercentage: number;
-}) => {
-  const navItems = [
-    { id: "personal", name: "Personal Info", icon: User, color: "blue" },
-    { id: "company", name: "Company Details", icon: Building, color: "purple" },
-    {
-      id: "letter",
-      name: "Letter Content",
-      icon: MessageSquare,
-      color: "green",
-    },
-    {
-      id: "additional",
-      name: "Additional Info",
-      icon: Settings,
-      color: "orange",
-    },
-  ];
-
-  return (
-    <div className="w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-4 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
-      <div className="flex flex-col h-full">
-        {/* Logo/Header */}
-        <div className="mb-6 p-3 bg-linear-to-r from-blue-600 to-purple-600 rounded-xl">
-          <div className="flex items-center gap-2 text-white">
-            <FileText className="w-5 h-5" />
-            <span className="font-semibold">Cover Letter Builder</span>
-          </div>
-        </div>
-
-        {/* Progress */}
-        <div className="mb-6">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="text-gray-600">Completion</span>
-            <span className="font-semibold text-blue-600">
-              {completionPercentage}%
-            </span>
-          </div>
-          <Progress value={completionPercentage} className="h-2" />
-        </div>
-
-        {/* Navigation Items */}
-        <ScrollArea className="flex-1">
-          <div className="space-y-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeSection === item.id;
-              const colorClasses = {
-                blue: isActive
-                  ? "bg-blue-50 text-blue-600 border-blue-200"
-                  : "hover:bg-gray-50",
-                purple: isActive
-                  ? "bg-purple-50 text-purple-600 border-purple-200"
-                  : "hover:bg-gray-50",
-                green: isActive
-                  ? "bg-green-50 text-green-600 border-green-200"
-                  : "hover:bg-gray-50",
-                orange: isActive
-                  ? "bg-orange-50 text-orange-600 border-orange-200"
-                  : "hover:bg-gray-50",
-              };
-
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onSectionChange(item.id)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 border border-transparent",
-                    colorClasses[item.color as keyof typeof colorClasses],
-                    isActive && "shadow-sm",
-                  )}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="text-sm font-medium flex-1 text-left">
-                    {item.name}
-                  </span>
-                  {isActive && <ChevronRight className="w-3 h-3" />}
-                </button>
-              );
-            })}
-          </div>
-        </ScrollArea>
-
-        {/* Template Selector */}
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500 mb-2 flex items-center gap-1">
-            <LayoutTemplate className="w-3 h-3" />
-            Template
-          </p>
-          <div className="grid grid-cols-3 gap-2">
-            {Object.entries(letterTemplates).map(([key, template]) => (
-              <button
-                key={key}
-                className="text-center group"
-                onClick={() => {}}
-              >
-                <div
-                  className={`h-12 rounded-lg ${template.preview} mb-1 group-hover:scale-105 transition-transform`}
-                />
-                <span className="text-xs text-gray-600">{template.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Save Status */}
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-            <Save className="w-3 h-3" />
-            <span>Auto-saving</span>
-            <CheckCircle className="w-3 h-3 text-green-500" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+const navItems = [
+  { id: "personal", name: "Personal Info", icon: User, color: "blue" },
+  { id: "company", name: "Company Details", icon: Building, color: "purple" },
+  {
+    id: "letter",
+    name: "Letter Content",
+    icon: MessageSquare,
+    color: "green",
+  },
+  {
+    id: "additional",
+    name: "Additional Info",
+    icon: Settings,
+    color: "orange",
+  },
+];
 
 // Real-time Preview Component
 const LivePreview = ({
@@ -995,19 +887,20 @@ export default function CoverLetterBuilder() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar - Responsive */}
           <div
-            className={`lg:w-72 ${mobileMenuOpen ? "block" : "hidden lg:block"}`}
+          // className={`lg:w-72 ${mobileMenuOpen ? "block" : "hidden lg:block"}`}
           >
             <SidebarNav
               activeSection={activeSection}
-              onSectionChange={(section) => {
-                setActiveSection(section);
-                setMobileMenuOpen(false); // Close mobile menu after selection
-              }}
+              onSectionChange={setActiveSection}
               completionPercentage={completionPercentage}
+              label={"Cover Letter Builder"}
+              letterTemplates={letterTemplates}
+              navItems={navItems}
             />
           </div>
 
           {/* Main Content - Split View */}
+
           <div className="flex-1 space-y-6 min-w-0">
             {/* Template Selector Bar */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">

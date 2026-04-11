@@ -34,10 +34,10 @@ export default function ExperiencePreview({
                       >
                         {exp.position}
                       </h3>
-                      <p className="font-medium text-gray-600">
+                      <p className="font-semibold text-[14px] text-gray-600">
                         {exp.company} -
                         {exp.location && (
-                          <span className="text-sm pl-1 text-gray-600 mb-2 ">
+                          <span className="pl-1 mb-2 ">
                             {exp.location} (remote)
                           </span>
                         )}

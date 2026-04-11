@@ -54,7 +54,7 @@ import ExperiencePreview from "./resumePreview/ExperiencePreview";
 import LanguagePreview from "./resumePreview/LanguagePreview";
 import ProjectsPreview from "./resumePreview/ProjectsPreview";
 import SkillsPreview from "./resumePreview/SkillsPreview";
-import SidebarNav from "./ResumeSideNav";
+import SidebarNav from "./Shared-SideNav";
 
 export const resumeTemplates = {
   modern: {
@@ -163,8 +163,13 @@ const LivePreview = ({
           style={headerStyle}
           primaryColor={style.primaryColor}
         />
-
-        <Separator />
+        <h2
+          className="text-lg font-semibold pb-1"
+          style={{ borderColor: style.secondaryColor }}
+        >
+          Professional Summary
+        </h2>
+        <Separator className="h-px mb-4" />
         <div className="mb-6">
           <div
             className="text-sm text-gray-700"
@@ -904,7 +909,7 @@ export default function ResumeBuilder() {
             activeSection={activeSection}
             onSectionChange={setActiveSection}
             completionPercentage={completionPercentage}
-            // letterTemplates={resumeTemplates}
+            label={"Resume Builder"}
             letterTemplates={letterTemplates}
             navItems={navItems}
           />
