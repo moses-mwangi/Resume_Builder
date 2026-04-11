@@ -81,7 +81,7 @@ interface RichTextEditorProps {
   positionTitle?: string; // Make position title controllable from parent
 }
 
-function RichTextEditor({
+function RichTextEditors({
   onRichTextEditorChange,
   index,
   defaultValue = "",
@@ -219,4 +219,4 @@ function RichTextEditor({
   );
 }
 
-export default RichTextEditor;
+export default RichTextEditors;

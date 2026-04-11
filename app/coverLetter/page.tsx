@@ -94,7 +94,7 @@ const letterTemplates = {
     font: "Inter",
     spacing: "comfortable",
     layout: "standard",
-    preview: "bg-gradient-to-br from-gray-800 to-gray-900",
+    preview: "bg-linear-to-br from-gray-800 to-gray-900",
   },
   modern: {
     name: "Modern",
@@ -102,7 +102,7 @@ const letterTemplates = {
     font: "Poppins",
     spacing: "relaxed",
     layout: "minimal",
-    preview: "bg-gradient-to-br from-blue-600 to-indigo-600",
+    preview: "bg-linear-to-br from-blue-600 to-indigo-600",
   },
   creative: {
     name: "Creative",
@@ -110,7 +110,7 @@ const letterTemplates = {
     font: "Plus Jakarta Sans",
     spacing: "relaxed",
     layout: "bold",
-    preview: "bg-gradient-to-br from-purple-600 to-pink-600",
+    preview: "bg-linear-to-br from-purple-600 to-pink-600",
   },
 };
 
@@ -159,10 +159,10 @@ const SidebarNav = ({
   ];
 
   return (
-    <div className="w-72 bg-white rounded-2xl shadow-lg border border-gray-200 p-4 sticky top-6 h-[calc(100vh-3rem)]">
+    <div className="w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-4 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)]">
       <div className="flex flex-col h-full">
         {/* Logo/Header */}
-        <div className="mb-6 p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
+        <div className="mb-6 p-3 bg-linear-to-r from-blue-600 to-purple-600 rounded-xl">
           <div className="flex items-center gap-2 text-white">
             <FileText className="w-5 h-5" />
             <span className="font-semibold">Cover Letter Builder</span>
@@ -298,6 +298,7 @@ const LivePreview = ({
       <div
         className="bg-white shadow-lg overflow-hidden border border-gray-200"
         style={{ fontFamily: style.font }}
+        data-letter-content="true"
       >
         <div className="px-11 py-8">
           <div className="mb-6">
@@ -704,6 +705,7 @@ export default function CoverLetterBuilder() {
   const [exportSuccess, setExportSuccess] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving">("saved");
   const [showPreview, setShowPreview] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
   // Calculate completion percentage
@@ -783,19 +785,134 @@ export default function CoverLetterBuilder() {
   };
 
   const exportToPDF = async () => {
-    if (!previewRef.current) return;
+    console.log("Starting PDF export...");
+
+    // Create a temporary container for the letter content
+    const tempContainer = document.createElement("div");
+    tempContainer.style.position = "fixed";
+    tempContainer.style.top = "0";
+    tempContainer.style.left = "0";
+    tempContainer.style.width = "210mm"; // A4 width
+    tempContainer.style.backgroundColor = "white";
+    tempContainer.style.zIndex = "9999";
+    tempContainer.style.padding = "20px";
+    tempContainer.style.boxSizing = "border-box";
+
+    document.body.appendChild(tempContainer);
+
     setIsExporting(true);
     try {
-      const canvas = await html2canvas(previewRef.current, {
+      // Convert template colors to safe hex values
+      const getSafeColor = (color: string) => {
+        // If it's already a hex or rgb color, return as-is
+        if (color.startsWith("#") || color.startsWith("rgb")) {
+          return color;
+        }
+
+        // Handle lab/oklab color functions - convert to safe hex values
+        if (color.includes("lab(") || color.includes("oklab(")) {
+          // Map template primary colors to safe hex equivalents
+          const templateColorMap: { [key: string]: string } = {
+            professional: "#1e293b", // dark slate
+            modern: "#3b82f6", // blue
+            creative: "#8b5cf6", // purple
+          };
+
+          // Find the template key that matches the color
+          for (const [templateName, template] of Object.entries(
+            letterTemplates,
+          )) {
+            if (template.primaryColor === color) {
+              return templateColorMap[templateName] || "#000000";
+            }
+          }
+
+          // Fallback: if we can't map it, use black
+          return "#000000";
+        }
+
+        // Fallback for any other unsupported formats
+        return color.startsWith("#") ? color : "#000000";
+      };
+
+      const originalColor = letterTemplates[selectedTemplate].primaryColor;
+      const safePrimaryColor = getSafeColor(originalColor);
+
+      console.log("Original color:", originalColor);
+      console.log("Safe color:", safePrimaryColor);
+
+      // Create the letter content in the temporary container
+      tempContainer.innerHTML = `
+        <div style="font-family: ${letterTemplates[selectedTemplate].font}; color: #000; background: white; padding: 20px;">
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h1 style="font-size: 20px; font-weight: bold; color: ${safePrimaryColor}; margin: 0;">
+                  ${letterData.personalInfo.fullName || "Your Name"}
+                </h1>
+                ${letterData.personalInfo.title ? `<p style="font-size: 14px; color: #666; margin: 4px 0 0 0;">${letterData.personalInfo.title}</p>` : ""}
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 8px; font-size: 14px; color: #666;">
+                  ${letterData.personalInfo.email ? `<span>${letterData.personalInfo.email}</span>` : ""}
+                  ${letterData.personalInfo.phone ? `<span>${letterData.personalInfo.phone}</span>` : ""}
+                  ${letterData.personalInfo.location ? `<span>${letterData.personalInfo.location}</span>` : ""}
+                </div>
+              </div>
+              <div style="font-size: 12px; color: #999; text-align: right;">
+                ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 30px; font-size: 14px; line-height: 1.6;">
+            ${letterData.recipient.hiringManager ? `<div style="font-weight: bold;">${letterData.recipient.hiringManager}</div>` : ""}
+            ${letterData.recipient.companyName ? `<div>${letterData.recipient.companyName}</div>` : ""}
+            ${letterData.recipient.companyAddress ? `<div>${letterData.recipient.companyAddress}</div>` : ""}
+          </div>
+
+          ${letterData.letter.subject ? `<div style="margin-bottom: 20px; font-size: 14px; font-weight: bold;">RE: ${letterData.letter.subject}</div>` : ""}
+
+          <div style="margin-bottom: 20px;">
+            <p style="font-size: 14px; line-height: 1.6; margin: 0;">Dear ${letterData.recipient.hiringManager || "Hiring Manager"},</p>
+          </div>
+
+          ${letterData.letter.opening ? `<div style="margin-bottom: 15px;"><p style="font-size: 14px; line-height: 1.6; margin: 0;">${letterData.letter.opening}</p></div>` : ""}
+
+          ${letterData.letter.body ? `<div style="margin-bottom: 15px;"><p style="font-size: 14px; line-height: 1.6; margin: 0; white-space: pre-wrap;">${letterData.letter.body}</p></div>` : ""}
+
+          ${letterData.letter.closing ? `<div style="margin-bottom: 20px;"><p style="font-size: 14px; line-height: 1.6; margin: 0;">${letterData.letter.closing}</p></div>` : ""}
+
+          <div style="margin-top: 30px;">
+            <p style="font-size: 14px; margin: 0;">Sincerely,</p>
+            <p style="font-weight: bold; margin: 12px 0 0 0; font-size: 14px;">
+              ${letterData.letter.signature || letterData.personalInfo.fullName || "Your Name"}
+            </p>
+          </div>
+        </div>
+      `;
+
+      console.log("Letter content created in temporary container");
+
+      const letterElement = tempContainer.firstElementChild as HTMLElement;
+      if (!letterElement) {
+        throw new Error("Letter content not found");
+      }
+
+      const canvas = await html2canvas(letterElement, {
         scale: 2,
         backgroundColor: "#ffffff",
+        useCORS: true,
+        allowTaint: true,
+        width: letterElement.scrollWidth,
+        height: letterElement.scrollHeight,
       });
-      const imgData = canvas.toDataURL("image/png");
+
+      const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
       });
+
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
@@ -805,8 +922,20 @@ export default function CoverLetterBuilder() {
       setExportSuccess(true);
       setTimeout(() => setExportSuccess(false), 3000);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("PDF Export Error:", error);
+      console.error(
+        "Error details:",
+        error instanceof Error ? error.message : String(error),
+      );
+      // Show user-friendly error message
+      alert(
+        `Failed to export PDF: ${error instanceof Error ? error.message : "Unknown error"}. Please try again or contact support.`,
+      );
     } finally {
+      // Clean up the temporary container
+      if (tempContainer && tempContainer.parentNode) {
+        document.body.removeChild(tempContainer);
+      }
       setIsExporting(false);
     }
   };
@@ -848,20 +977,40 @@ export default function CoverLetterBuilder() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-6">
-        <div className="flex gap-6">
-          {/* Sidebar */}
-          <SidebarNav
-            activeSection={activeSection}
-            onSectionChange={setActiveSection}
-            completionPercentage={completionPercentage}
-          />
+        {/* Mobile Menu Toggle */}
+        <div className="lg:hidden mb-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex items-center gap-2"
+          >
+            <FileText className="w-4 h-4" />
+            {mobileMenuOpen ? "Hide Menu" : "Show Menu"}
+          </Button>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar - Responsive */}
+          <div
+            className={`lg:w-72 ${mobileMenuOpen ? "block" : "hidden lg:block"}`}
+          >
+            <SidebarNav
+              activeSection={activeSection}
+              onSectionChange={(section) => {
+                setActiveSection(section);
+                setMobileMenuOpen(false); // Close mobile menu after selection
+              }}
+              completionPercentage={completionPercentage}
+            />
+          </div>
 
           {/* Main Content - Split View */}
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 space-y-6 min-w-0">
             {/* Template Selector Bar */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex items-center justify-between">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex gap-2">
                 {Object.entries(letterTemplates).map(([key, template]) => (
                   <Button
@@ -923,7 +1072,7 @@ export default function CoverLetterBuilder() {
             {/* Two Column Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
               {showPreview ? (
-                <Card className="sticky px-12 top-6 h-[calc(100vh-160px)]">
+                <Card className="lg:sticky px-4 lg:px-12 top-6 h-[calc(100vh-160px)]">
                   <div className="bg-white/90 rounded-xl py-4 h-full overflow-auto no-scrollbar">
                     <div className="flex items-center justify-between px-4 mb-3">
                       <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">

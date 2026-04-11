@@ -13,6 +13,15 @@ import {
 } from "lucide-react";
 import { PersonalInfo } from "@/types/resume";
 import { Separator } from "../../components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type HeaderStyle =
   | "minimal"
@@ -546,27 +555,129 @@ export function HeaderStyleSelector({
   ];
 
   return (
-    <div className="space-y-3">
-      <label className="text-sm font-medium">Header Style</label>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {styles.map((style) => (
-          <button
-            key={style.id}
-            onClick={() => onStyleChange(style.id)}
-            className={`p-3 text-left border rounded-lg transition-all ${
-              selectedStyle === style.id
-                ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
-                : "border-gray-200 hover:border-gray-300 dark:border-gray-700"
-            }`}
-          >
-            <div className="font-medium text-sm mb-1">{style.name}</div>
-            <div className="text-xs text-gray-500 mb-2">
-              {style.description}
-            </div>
-            <div className="text-xs text-gray-400 italic">{style.preview}</div>
-          </button>
-        ))}
-      </div>
+    <div className=" cursor-pointer">
+      <Select
+        value={selectedStyle}
+        onValueChange={(value) => onStyleChange(value as HeaderStyle)}
+      >
+        <SelectTrigger className="cursor-pointer w-full min-w-40">
+          <SelectValue placeholder="Select header style" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Header Styles</SelectLabel>
+            {styles.map((style) => (
+              <SelectItem
+                className=" cursor-pointer"
+                key={style.id}
+                value={style.id}
+              >
+                {style.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   );
 }
+
+// Header selector component for users to choose
+// export function HeaderStyleSelector({
+//   selectedStyle,
+//   onStyleChange,
+// }: {
+//   selectedStyle: HeaderStyle;
+//   onStyleChange: (style: HeaderStyle) => void;
+// }) {
+//   const styles: {
+//     id: HeaderStyle;
+//     name: string;
+//     description: string;
+//     preview: string;
+//   }[] = [
+//     {
+//       id: "minimal",
+//       name: "Minimal",
+//       description: "Clean and simple, focuses on essential info",
+//       preview: "Name • Title • Contacts in line",
+//     },
+//     {
+//       id: "split",
+//       name: "Split Layout",
+//       description: "Info on left, social links on right",
+//       preview: "Name | Title | Contacts | Social",
+//     },
+//     {
+//       id: "premium",
+//       name: "Premium",
+//       description: "Elegant with separator line",
+//       preview: "Large Name with decorative line",
+//     },
+//     {
+//       id: "side-by-side",
+//       name: "Side by Side",
+//       description: "Professional with bordered contact row",
+//       preview: "Name centered, contacts in bordered row",
+//     },
+//     {
+//       id: "creative",
+//       name: "Creative",
+//       description: "Perfect for creative roles with tagline",
+//       preview: "Name with quote and chip contacts",
+//     },
+//     {
+//       id: "modern",
+//       name: "Modern",
+//       description: "Includes initial avatar and clean layout",
+//       preview: "Avatar with name and social icons",
+//     },
+//   ];
+
+//   return (
+//     <div className="">
+//       <Select
+//         onValueChange={(value) => setSelectedTemplate(value as any)}
+//         // onValueChange={(value) => setSelectedTemplate(value as any)}
+//       >
+//         <SelectTrigger className="w-full max-w-48">
+//           <SelectValue placeholder="Select a fruit" />
+//         </SelectTrigger>
+//         <SelectContent>
+//           <SelectGroup>
+//             <SelectLabel>Header Selection</SelectLabel>
+//             {styles.map((template) => (
+//               <SelectItem key={template.id} value={template.name}>
+//                 {template.name}
+//               </SelectItem>
+//             ))}
+//           </SelectGroup>
+//         </SelectContent>
+//       </Select>
+//       <div className="space-y-3">
+//         <label className="text-sm font-medium">Header Style</label>
+//         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+//           {styles.map((style) => (
+//             <button
+//               key={style.id}
+//               onClick={() => onStyleChange(style.id)}
+//               className={`p-3 text-left border rounded-lg transition-all ${
+//                 selectedStyle === style.id
+//                   ? "border-blue-500 bg-blue-50 dark:bg-blue-950"
+//                   : "border-gray-200 hover:border-gray-300 dark:border-gray-700"
+//               }`}
+//             >
+//               <div className="font-medium text-sm mb-1">{style.name}</div>
+//               <div className="text-xs text-gray-500 mb-2">
+//                 {style.description}
+//               </div>
+//               <div className="text-xs text-gray-400 italic">
+//                 {style.preview}
+//               </div>
+//             </button>
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Language } from "@/types/resume";
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Trash2 } from "lucide-react";
+import { Globe, Languages, Plus, Trash2 } from "lucide-react";
 
 export const LanguagesForm = ({
   languages,
@@ -18,10 +18,17 @@ export const LanguagesForm = ({
     className="space-y-6"
   >
     <div className="flex justify-between items-center">
-      <h3 className="text-lg font-semibold">Languages</h3>
-      <Button onClick={onAdd} className="flex items-center gap-2">
-        <Plus className="w-4 h-4" />
-        Add Language
+      <div>
+        <h3 className="text-lg font-semibold flex items-center gap-2">
+          <Globe className="w-5 h-5 text-indigo-600" />
+          Language
+        </h3>
+        <p className="text-sm text-gray-500 mt-1">
+          Add your language proficient
+        </p>
+      </div>
+      <Button onClick={onAdd} size="sm" className="gap-1 cursor-pointer">
+        <Plus className="w-4 h-4" /> Add Language
       </Button>
     </div>
 
@@ -63,13 +70,14 @@ export const LanguagesForm = ({
               </select>
             </div>
           </div>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => onDelete(lang.id)}
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
+          <div className="relative px-4">
+            <button
+              onClick={() => onDelete(lang.id)}
+              className="absolute top-2 right-1 cursor-pointer text-gray-400 hover:text-red-500"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
         </motion.div>
       ))}
     </AnimatePresence>

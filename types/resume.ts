@@ -6,20 +6,22 @@ export interface PersonalInfo {
   website?: string;
   linkedin?: string;
   github?: string;
-  summary: string;
-  avatar?: string;
+  summary?: string;
+  avatar?: string; // added
   title?: string;
+  portfolio?: string;
 }
 
 export interface Experience {
   id: string;
   company: string;
   position: string;
-  location: string;
+  location: string; ///aded
   startDate: string;
   endDate: string;
-  current: boolean;
-  description: string[];
+  current: boolean; ///adde
+  // description: string[];
+  description: string;
   achievements?: string[];
 }
 
@@ -27,12 +29,12 @@ export interface Education {
   id: string;
   institution: string;
   degree: string;
-  field: string;
-  location?: string;
+  field: string; // fieldOfStudy to other part
+  location?: string; /// add
   startDate: string;
   endDate: string;
   gpa?: string;
-  achievements?: string[];
+  achievements?: string[]; /// add
   current?: boolean;
   description?: string[];
 }
@@ -42,6 +44,7 @@ export interface Skill {
   name: string;
   category: string;
   level: number; // 1-5
+  // level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
 }
 
 export interface Project {
@@ -50,8 +53,8 @@ export interface Project {
   description: string;
   technologies: string[];
   link?: string;
-  github?: string;
-  highlights?: string[];
+  github?: string; //added
+  highlights?: string[]; //added
   startDate?: string;
   endDate?: string;
 }
@@ -61,8 +64,8 @@ export interface Certificate {
   name: string;
   issuer: string;
   date: string;
-  credentialId?: string;
-  credentialUrl?: string;
+  credentialId?: string; //added
+  credentialUrl?: string; //added
   link: string;
 }
 
@@ -70,6 +73,7 @@ export interface Language {
   id: string;
   name: string;
   proficiency: string;
+  // proficiency: "Basic" | "Conversational" | "Professional" | "Native";
 }
 
 export interface ResumeData {
