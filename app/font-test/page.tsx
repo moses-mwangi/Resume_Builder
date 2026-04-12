@@ -1,6 +1,3 @@
-// app/font-test/page.tsx
-// Or place this in app/page.tsx if you want it as your main page
-
 "use client";
 
 import { useState } from "react";
@@ -103,7 +100,10 @@ export default function FontTestPage() {
 
   function getFont(key: FontKey) {
     if (key === "Inter") {
-      return { family: "system-ui, -apple-system, sans-serif", category: "System Default" };
+      return {
+        family: "system-ui, -apple-system, sans-serif",
+        category: "System Default",
+      };
     }
     return allFonts[key];
   }

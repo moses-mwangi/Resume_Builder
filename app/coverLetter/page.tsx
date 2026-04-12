@@ -1,91 +1,31 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  FileText,
-  Download,
-  Printer,
-  Eye,
-  Edit,
-  Sparkles,
-  CheckCircle,
-  User,
-  Building,
-  Mail,
-  Phone,
-  MapPin,
-  RefreshCw,
-  Star,
-  Zap,
-  ChevronRight,
-  ChevronLeft,
-  MessageSquare,
-  Settings,
-  Check,
-  Save,
-  LayoutTemplate,
-  Send,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { CoverLetterData } from "@/types/letter";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { cn } from "@/lib/utils";
+import {
+  Building,
+  CheckCircle,
+  Download,
+  Edit,
+  Eye,
+  FileText,
+  MessageSquare,
+  RefreshCw,
+  Settings,
+  Sparkles,
+  User,
+} from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import SidebarNav from "../resume/Shared-SideNav";
-
-// Types
-interface CoverLetterData {
-  personalInfo: {
-    fullName: string;
-    email: string;
-    phone: string;
-    location: string;
-    linkedin: string;
-    portfolio: string;
-    title: string;
-  };
-  recipient: {
-    companyName: string;
-    hiringManager: string;
-    companyAddress: string;
-    recipientEmail: string;
-    address?: Address;
-  };
-  letter: {
-    position: string;
-    subject: string;
-    opening: string;
-    body: string;
-    closing: string;
-    signature: string;
-  };
-  additional: {
-    referral: string;
-    portfolioLink: string;
-    availableFrom: string;
-    salaryExpectation: string;
-  };
-}
-
-interface Address {
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  line1: string;
-  line2: string;
-  cityStateZip: string;
-  country: string;
-}
 
 // Templates
 const letterTemplates = {
@@ -556,39 +496,60 @@ const AdditionalSection = ({
   </div>
 );
 
+export const initialLetterData = {
+  id: "",
+  title: "",
+  company: "",
+  date: Date.now(),
+  personalInfo: {
+    id: "",
+    fullName: "",
+    email: "",
+    phone: "",
+    location: "",
+    linkedin: "",
+    portfolio: "",
+    title: "",
+  },
+  recipient: {
+    companyName: "",
+    hiringManager: "",
+    companyAddress: "",
+    recipientEmail: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zip: "",
+      line1: "",
+      line2: "",
+      cityStateZip: "",
+      country: "",
+    },
+  },
+  letter: {
+    position: "",
+    subject: "",
+    opening: "",
+    body: "",
+    closing: "",
+    signature: "",
+  },
+  additional: {
+    referral: "",
+    portfolioLink: "",
+    availableFrom: "",
+    salaryExpectation: "",
+  },
+};
+
 // Main Component
 export default function CoverLetterBuilder() {
-  const [letterData, setLetterData] = useState<CoverLetterData>({
-    personalInfo: {
-      fullName: "",
-      email: "",
-      phone: "",
-      location: "",
-      linkedin: "",
-      portfolio: "",
-      title: "",
-    },
-    recipient: {
-      companyName: "",
-      hiringManager: "",
-      companyAddress: "",
-      recipientEmail: "",
-    },
-    letter: {
-      position: "",
-      subject: "",
-      opening: "",
-      body: "",
-      closing: "",
-      signature: "",
-    },
-    additional: {
-      referral: "",
-      portfolioLink: "",
-      availableFrom: "",
-      salaryExpectation: "",
-    },
-  });
+  const params = useParams();
+  const id = params.id as string;
+
+  const [letterData, setLetterData] =
+    useState<CoverLetterData>(initialLetterData);
 
   const [activeSection, setActiveSection] = useState("personal");
   const [selectedTemplate, setSelectedTemplate] =
@@ -599,6 +560,9 @@ export default function CoverLetterBuilder() {
   const [showPreview, setShowPreview] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(true);
 
   // Calculate completion percentage
   const completionPercentage = (() => {
@@ -614,20 +578,80 @@ export default function CoverLetterBuilder() {
     return Math.round((filled / total) * 100);
   })();
 
-  // Load/Save to localStorage
+  // Load resume data by ID from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem("coverLetterData");
-    if (saved) setLetterData(JSON.parse(saved));
-  }, []);
+    const savedLetter = localStorage.getItem("letterData");
+    console.log("SAVED-DATA", savedLetter);
+    const loadLetter = async () => {
+      setIsLoading(true);
+      try {
+        if (savedLetter) {
+          const letterArray: CoverLetterData[] = JSON.parse(savedLetter);
+          const found = letterArray.find((r) => {
+            return r.id === id;
+          });
+
+          if (found) {
+            setLetterData(found);
+            // setHistory([found]);
+            // setHistoryIndex(0);
+          } else {
+            const individualLetter = localStorage.getItem(`letter-${id}`);
+            if (individualLetter) {
+              const parsed = JSON.parse(individualLetter);
+              setLetterData(parsed);
+              // setHistory([parsed]);
+              // setHistoryIndex(0);
+            } else {
+              const newLetter = {
+                ...initialLetterData,
+                id: id,
+              };
+              setLetterData(newLetter);
+              // setHistory([newLetter]);
+              // setHistoryIndex(0);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error loading resume:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      loadLetter();
+    } else {
+      setIsLoading(false);
+    }
+  }, [id]);
 
   useEffect(() => {
-    const saveTimeout = setTimeout(() => {
-      localStorage.setItem("coverLetterData", JSON.stringify(letterData));
-      setSaveStatus("saved");
-    }, 500);
-    setSaveStatus("saving");
-    return () => clearTimeout(saveTimeout);
-  }, [letterData]);
+    if (!isLoading && id) {
+      const saveTimeout = setTimeout(() => {
+        const savedLetter = localStorage.getItem("letterData");
+        let letterArray = savedLetter ? JSON.parse(savedLetter) : [];
+
+        if (!Array.isArray(letterArray)) {
+          letterArray = [];
+        }
+
+        const existingIndex = letterArray.findIndex((r: any) => r.id === id);
+        if (existingIndex >= 0) {
+          letterArray[existingIndex] = letterData;
+        } else {
+          letterArray.push(letterData);
+        }
+
+        localStorage.setItem("letterData", JSON.stringify(letterArray));
+        setSaveStatus("saved");
+      }, 300);
+
+      setSaveStatus("saving");
+      return () => clearTimeout(saveTimeout);
+    }
+  }, [letterData, isLoading]);
 
   const updatePersonalInfo = (field: string, value: string) =>
     setLetterData((prev) => ({
@@ -781,8 +805,6 @@ export default function CoverLetterBuilder() {
           </div>
         </div>
       `;
-
-      console.log("Letter content created in temporary container");
 
       const letterElement = tempContainer.firstElementChild as HTMLElement;
       if (!letterElement) {

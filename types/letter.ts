@@ -1,5 +1,10 @@
 export interface CoverLetterData {
+  id: string;
+  title: string;
+  company: string;
+  date: string | number;
   personalInfo: {
+    id: string;
     fullName: string;
     email: string;
     phone: string;

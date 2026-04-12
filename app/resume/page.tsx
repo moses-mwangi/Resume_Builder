@@ -186,7 +186,7 @@ const LivePreview = ({
 
 // const initialResumeData: ResumeData = {
 export const initialResumeData: ResumeData = {
-  id: crypto.randomUUID(),
+  id: "",
   title: "",
   role: "",
   date: Date.now(),

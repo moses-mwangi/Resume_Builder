@@ -27,55 +27,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import SidebarNav from "../../resume/Shared-SideNav";
-
-// Types
-interface CoverLetterData {
-  id?: number;
-  title?: string;
-  personalInfo: {
-    fullName: string;
-    email: string;
-    phone: string;
-    location: string;
-    linkedin: string;
-    portfolio: string;
-    title: string;
-  };
-  recipient: {
-    companyName: string;
-    hiringManager: string;
-    companyAddress: string;
-    recipientEmail: string;
-    address?: Address;
-  };
-  letter: {
-    position: string;
-    subject: string;
-    opening: string;
-    body: string;
-    closing: string;
-    signature: string;
-  };
-  additional: {
-    referral: string;
-    portfolioLink: string;
-    availableFrom: string;
-    salaryExpectation: string;
-  };
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-interface Address {
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  line1: string;
-  line2: string;
-  cityStateZip: string;
-  country: string;
-}
+import { CoverLetterData } from "@/types/letter";
 
 // Templates
 const letterTemplates = {
@@ -543,43 +495,59 @@ const AdditionalSection = ({
   </div>
 );
 
+export const initialLetterData = {
+  id: "",
+  title: "",
+  company: "",
+  date: Date.now(),
+  personalInfo: {
+    id: "",
+    fullName: "",
+    email: "",
+    phone: "",
+    location: "",
+    linkedin: "",
+    portfolio: "",
+    title: "",
+  },
+  recipient: {
+    companyName: "",
+    hiringManager: "",
+    companyAddress: "",
+    recipientEmail: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      zip: "",
+      line1: "",
+      line2: "",
+      cityStateZip: "",
+      country: "",
+    },
+  },
+  letter: {
+    position: "",
+    subject: "",
+    opening: "",
+    body: "",
+    closing: "",
+    signature: "",
+  },
+  additional: {
+    referral: "",
+    portfolioLink: "",
+    availableFrom: "",
+    salaryExpectation: "",
+  },
+};
+
 // Main Component
 export default function CoverLetterBuilder() {
   const params = useParams();
-  const router = useRouter();
   const id = params.id as string;
-
-  const [letterData, setLetterData] = useState<CoverLetterData>({
-    personalInfo: {
-      fullName: "",
-      email: "",
-      phone: "",
-      location: "",
-      linkedin: "",
-      portfolio: "",
-      title: "",
-    },
-    recipient: {
-      companyName: "",
-      hiringManager: "",
-      companyAddress: "",
-      recipientEmail: "",
-    },
-    letter: {
-      position: "",
-      subject: "",
-      opening: "",
-      body: "",
-      closing: "",
-      signature: "",
-    },
-    additional: {
-      referral: "",
-      portfolioLink: "",
-      availableFrom: "",
-      salaryExpectation: "",
-    },
-  });
+  const [letterData, setLetterData] =
+    useState<CoverLetterData>(initialLetterData);
 
   const [activeSection, setActiveSection] = useState("personal");
   const [selectedTemplate, setSelectedTemplate] =
@@ -592,113 +560,78 @@ export default function CoverLetterBuilder() {
   const [isLoading, setIsLoading] = useState(true);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  // Load cover letter data by ID
   useEffect(() => {
-    const loadCoverLetter = async () => {
+    const loadLetter = async () => {
+      const savedLetter = localStorage.getItem("letterData");
       setIsLoading(true);
       try {
-        // Try to load from localStorage first (for demo)
-        const savedLetters = localStorage.getItem("coverLetters");
-        if (savedLetters) {
-          const allLetters = JSON.parse(savedLetters);
-          const foundLetter = allLetters.find(
-            (l: any) => l.id === parseInt(id),
-          );
+        if (savedLetter) {
+          const letterArray: CoverLetterData[] = JSON.parse(savedLetter);
+          const found = letterArray.find((r) => {
+            return r.id === id;
+          });
 
-          if (foundLetter) {
-            // Populate the form with saved data
-            setLetterData({
-              personalInfo: {
-                fullName: foundLetter.personalInfo?.fullName || "",
-                email: foundLetter.personalInfo?.email || "",
-                phone: foundLetter.personalInfo?.phone || "",
-                location: foundLetter.personalInfo?.location || "",
-                linkedin: foundLetter.personalInfo?.linkedin || "",
-                portfolio: foundLetter.personalInfo?.portfolio || "",
-                title: foundLetter.personalInfo?.title || "",
-              },
-              recipient: {
-                companyName:
-                  foundLetter.recipient?.companyName ||
-                  foundLetter.company ||
-                  "",
-                hiringManager: foundLetter.recipient?.hiringManager || "",
-                companyAddress: foundLetter.recipient?.companyAddress || "",
-                recipientEmail: foundLetter.recipient?.recipientEmail || "",
-              },
-              letter: {
-                position: foundLetter.letter?.position || "",
-                subject: foundLetter.letter?.subject || "",
-                opening: foundLetter.letter?.opening || "",
-                body: foundLetter.letter?.body || "",
-                closing: foundLetter.letter?.closing || "",
-                signature: foundLetter.letter?.signature || "",
-              },
-              additional: {
-                referral: foundLetter.additional?.referral || "",
-                portfolioLink: foundLetter.additional?.portfolioLink || "",
-                availableFrom: foundLetter.additional?.availableFrom || "",
-                salaryExpectation:
-                  foundLetter.additional?.salaryExpectation || "",
-              },
-              id: foundLetter.id,
-              title: foundLetter.title,
-            });
+          if (found) {
+            setLetterData(found);
+            // setHistory([found]);
+            // setHistoryIndex(0);
+          } else {
+            const individualLetter = localStorage.getItem(`letter-${id}`);
+            if (individualLetter) {
+              const parsed = JSON.parse(individualLetter);
+              setLetterData(parsed);
+              // setHistory([parsed]);
+              // setHistoryIndex(0);
+            } else {
+              const newLetter = {
+                ...initialLetterData,
+                id: id,
+              };
+              setLetterData(newLetter);
+              // setHistory([newLetter]);
+              // setHistoryIndex(0);
+            }
           }
         }
       } catch (error) {
-        console.error("Error loading cover letter:", error);
+        console.error("Error loading resume:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
     if (id) {
-      loadCoverLetter();
+      loadLetter();
     } else {
       setIsLoading(false);
     }
   }, [id]);
 
-  // Auto-save to localStorage
   useEffect(() => {
     if (!isLoading && id) {
       const saveTimeout = setTimeout(() => {
-        // Save to individual letter storage
-        localStorage.setItem(`coverLetter-${id}`, JSON.stringify(letterData));
+        const savedLetter = localStorage.getItem("letterData");
+        let letterArray = savedLetter ? JSON.parse(savedLetter) : [];
 
-        // Also update the main coverLetters array
-        const savedLetters = localStorage.getItem("coverLetters");
-        let allLetters = savedLetters ? JSON.parse(savedLetters) : [];
-
-        const existingIndex = allLetters.findIndex(
-          (l: any) => l.id === parseInt(id),
-        );
-        const updatedLetter = {
-          id: parseInt(id),
-          title: letterData.letter.position || "Untitled Cover Letter",
-          company: letterData.recipient.companyName,
-          personalInfo: letterData.personalInfo,
-          recipient: letterData.recipient,
-          letter: letterData.letter,
-          additional: letterData.additional,
-          updatedAt: new Date().toISOString(),
-        };
-
-        if (existingIndex >= 0) {
-          allLetters[existingIndex] = updatedLetter;
-        } else {
-          allLetters.push(updatedLetter);
+        if (!Array.isArray(letterArray)) {
+          letterArray = [];
         }
 
-        localStorage.setItem("coverLetters", JSON.stringify(allLetters));
+        const existingIndex = letterArray.findIndex((r: any) => r.id === id);
+        if (existingIndex >= 0) {
+          letterArray[existingIndex] = letterData;
+        } else {
+          letterArray.push(letterData);
+        }
+
+        localStorage.setItem("letterData", JSON.stringify(letterArray));
         setSaveStatus("saved");
-      }, 500);
+      }, 300);
 
       setSaveStatus("saving");
       return () => clearTimeout(saveTimeout);
     }
-  }, [letterData, id, isLoading]);
+  }, [letterData, isLoading]);
 
   const updatePersonalInfo = (field: string, value: string) =>
     setLetterData((prev) => ({
@@ -943,8 +876,7 @@ export default function CoverLetterBuilder() {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-6">
-        {/* Header with back button */}
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
@@ -952,29 +884,7 @@ export default function CoverLetterBuilder() {
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
           </Link>
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {letterData.letter.position || "Cover Letter Builder"}
-              </h1>
-              {letterData.recipient.companyName && (
-                <p className="text-gray-500 mt-1">
-                  for {letterData.recipient.companyName}
-                </p>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
-              {saveStatus === "saving" && (
-                <span className="text-xs text-gray-500">Saving...</span>
-              )}
-              {saveStatus === "saved" && (
-                <span className="text-xs text-green-600 flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3" /> Saved
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
+        </div> */}
 
         {/* Mobile Menu Toggle */}
         <div className="lg:hidden mb-4">
