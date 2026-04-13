@@ -105,7 +105,7 @@ const CreateModal = ({
                 type="submit"
                 className="flex-1 cursor-pointer px-3 py-1.5 text-sm bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all"
               >
-                Create DDD
+                Create
               </button>
             </div>
           </form>

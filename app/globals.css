@@ -316,3 +316,26 @@
     scrollbar-width: none;
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  /* Fix transparent backgrounds */
+  /* .bg-white\/90 {
+    background: white !important;
+  } */
+
+  #resume-preview,
+  #resume-preview * {
+    visibility: visible;
+  }
+
+  #resume-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

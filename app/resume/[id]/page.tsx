@@ -22,6 +22,7 @@ import {
   User,
   Wrench,
   ArrowLeft,
+  Sparkles,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -154,7 +155,7 @@ const LivePreview = ({
 
   return (
     <div
-      className="bg-white shadow-lg overflow-hidden no-scrollbar border border-gray-200"
+      className="bg-white overflow-hidden no-scrollbar"
       style={{ fontFamily: style?.font }}
     >
       <div className="px-9 py-7">
@@ -726,6 +727,23 @@ export default function ResumeBuilder() {
       <div className="container mx-auto px-4 py-6">
         {/* Header with back button and title */}
 
+        <Link href={`/resume/${id}/edit`}>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Sparkles className="w-4 h-4" />
+            Advanced Edit
+          </Button>
+        </Link>
+        <Link href={`/resume/${id}/full-edit`}>
+          <Button
+            variant="default"
+            size="sm"
+            className="gap-2 bg-gradient-to-r from-purple-600 to-pink-600"
+          >
+            <Sparkles className="w-4 h-4" />
+            Full Editor
+          </Button>
+        </Link>
+
         <div className="flex gap-6">
           <SidebarNav
             activeSection={activeSection}
@@ -789,7 +807,10 @@ export default function ResumeBuilder() {
                   )}
                 </Button>
                 <Button
-                  onClick={exportToPDF}
+                  onClick={() => {
+                    window.print();
+                    // exportToPDF}
+                  }}
                   disabled={isExporting}
                   size="sm"
                   className="gap-2 cursor-pointer"
@@ -814,9 +835,16 @@ export default function ResumeBuilder() {
 
             {/* Main Content */}
             <div className="gap-6">
+              {/* <button onClick={() => window.print()}>Print Resume</button> */}
               {showPreview ? (
-                <Card className="sticky p-0 shadow-lg border-gray-200">
-                  <div className="bg-white/90 rounded-xl h-[calc(100vh-130px)] no-scrollbar overflow-auto">
+                <Card
+                  id="resume-preview"
+                  className="sticky p-0 rounded-l-lg border-gray-200"
+                >
+                  <div
+                    id="resume-preview"
+                    className="bg-white/90 h-[calc(100vh-130px)] no-scrollbar overflow-auto"
+                  >
                     <div ref={previewRef}>
                       <LivePreview
                         data={resumeData}
@@ -827,8 +855,9 @@ export default function ResumeBuilder() {
                   </div>
                 </Card>
               ) : (
-                <Card className="p-6 shadow-lg border-gray-200">
-                  <ScrollArea className="max-h-[calc(100vh-200px)] h-[calc(100vh-260px)] pr-4">
+                <Card className="p-6 shadow-lg border-gray-200 ">
+                  <ScrollArea className="max-h-[calc(100vh-100px)] h-[calc(100vh-100px)] pr-4">
+                    {/* <ScrollArea className="max-h-[calc(100vh-100px)] min-h-[calc(100vh-300px)] pr-4"> */}
                     {renderSection()}
                   </ScrollArea>
                 </Card>

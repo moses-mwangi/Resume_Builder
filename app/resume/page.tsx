@@ -1039,8 +1039,8 @@ export default function ResumeBuilder() {
                   </div>
                 </Card>
               ) : (
-                <Card className="p-6 shadow-lg border-gray-200">
-                  <ScrollArea className="max-h-[calc(100vh-200px)]  h-[calc(100vh-260px)] pr-4">
+                <Card className="p-6 shadow-lg border-gray-900">
+                  <ScrollArea className="max-h-[calc(100vh-300px)]  h-[calc(100vh-260px)] pr-4">
                     {renderSection()}
                   </ScrollArea>
                 </Card>

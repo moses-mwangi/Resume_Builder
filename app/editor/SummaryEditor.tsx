@@ -419,25 +419,7 @@ export default function SummaryEditor({
         },
       }),
     ],
-    content:
-      initialContent ||
-      `
-      <h1 style="font-size: 32px; font-weight: 700; margin: 20px 0 16px 0;">Professional Summary</h1>
-      <p style="margin: 10px 0;">Results-driven professional with <strong>over 8 years</strong> of experience in <em>software development</em>.</p>
-      <h2 style="font-size: 24px; font-weight: 600; margin: 16px 0 12px 0;">Key Achievements</h2>
-      <ul style="margin: 10px 0 10px 20px; padding-left: 20px;">
-        <li style="margin: 5px 0;">✨ Led 15+ successful projects</li>
-        <li style="margin: 5px 0;">🏆 Employee of the Year 2023</li>
-        <li style="margin: 5px 0;">💡 Expert in full-stack development</li>
-      </ul>
-      <h3 style="font-size: 20px; font-weight: 600; margin: 14px 0 10px 0;">Skills & Expertise</h3>
-      <ol style="margin: 10px 0 10px 20px; padding-left: 20px;">
-        <li style="margin: 5px 0;">React & Next.js</li>
-        <li style="margin: 5px 0;">Node.js & Python</li>
-        <li style="margin: 5px 0;">Cloud Architecture</li>
-      </ol>
-      <p style="margin: 10px 0;">Passionate about <span style="background-color: #fef08a;">innovation</span> and <span style="color: #3b82f6;">continuous learning</span>.</p>
-    `,
+    content: initialContent || ``,
     editable: !readOnly,
     editorProps: {
       attributes: {
@@ -877,7 +859,8 @@ export default function SummaryEditor({
       <style jsx global>{`
         .ProseMirror {
           padding: 1.5rem;
-          min-height: 400px;
+          /* min-height: 400px; */
+          min-height: 40px;
           outline: none;
         }
 
