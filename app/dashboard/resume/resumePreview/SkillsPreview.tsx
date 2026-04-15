@@ -60,7 +60,7 @@ export default function SkillsPreview({
           </h2>
           {/* <Separator className="mb-4 h-0.2" /> */}
           <Separator className="h-px mb-4" />
-          <div className="grid grid-cols-3 gap-x-14">
+          <div className="grid grid-cols-3 gap-x-12 gap-y-8">
             {Object.entries(groupedSkills).map(([category, categorySkills]) => {
               return (
                 <div key={category}>
@@ -81,16 +81,12 @@ export default function SkillsPreview({
                     </div>
 
                     <div className="grid grid-cols-1 items-center gap-y-2">
-                      {/* {skills.map((skill) => ( */}
                       {categorySkills.map((skill) => (
                         <div key={skill.id}>
                           <div className="flex justify-between text-[15px]">
                             <div className="flex items-center gap-2">
-                              <span className="font-medium text-gray-700">
+                              <span className="font-medium text-gray-700 ">
                                 {skill.name}
-                              </span>
-                              <span className="text-xs text-gray-400">
-                                ({getLevelText(skill.level)})
                               </span>
                             </div>
                           </div>
