@@ -76,7 +76,7 @@ export default function SkillsPreview({
                         {category}
                       </h3>
                       <span className="text-xs text-gray-400">
-                        ({categorySkills.length})
+                        ({categorySkills.length})888
                       </span>
                     </div>
 

@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import html2canvas from "html2canvas";
+// import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import {
   Award,
@@ -158,7 +159,8 @@ const LivePreview = ({
       className="bg-white overflow-hidden no-scrollbar"
       style={{ fontFamily: style?.font }}
     >
-      <div className="px-9 py-7">
+      {/* <div className="px-9 py-7"> */}
+      <div className="">
         <Separator />
         <ResumeHeader
           data={data.personalInfo}
@@ -808,8 +810,7 @@ export default function ResumeBuilder() {
                 </Button>
                 <Button
                   onClick={() => {
-                    window.print();
-                    // exportToPDF}
+                    exportToPDF();
                   }}
                   disabled={isExporting}
                   size="sm"
@@ -835,24 +836,17 @@ export default function ResumeBuilder() {
 
             {/* Main Content */}
             <div className="gap-6">
-              {/* <button onClick={() => window.print()}>Print Resume</button> */}
               {showPreview ? (
-                <Card
-                  id="resume-preview"
-                  // className="sticky p-0 rounded-l-lg border-gray-200"
-                  className=" p-0 rounded-l-lg border-gray-200"
-                >
+                <Card className="sticky px-8 py-7 rounded-l-lg border-gray-200">
                   <div
-                    id="resume-preview"
+                    ref={previewRef}
                     className="bg-white/90 h-[calc(100vh-130px)] no-scrollbar overflow-auto"
                   >
-                    <div ref={previewRef}>
-                      <LivePreview
-                        data={resumeData}
-                        template={selectedTemplate}
-                        headerStyle={headerStyle}
-                      />
-                    </div>
+                    <LivePreview
+                      data={resumeData}
+                      template={selectedTemplate}
+                      headerStyle={headerStyle}
+                    />
                   </div>
                 </Card>
               ) : (
