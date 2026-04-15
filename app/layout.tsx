@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Header from "@/components/ui/Header";
-import { CardFooter } from "@/components/ui/card";
-import Footer from "@/components/ui/Footer";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -32,6 +32,7 @@ export default function RootLayout({
       // className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}
       >
         <div>
+          <Toaster position="bottom-center" />
           <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
             <Header />
           </header>

@@ -322,11 +322,6 @@
     visibility: hidden;
   }
 
-  /* Fix transparent backgrounds */
-  /* .bg-white\/90 {
-    background: white !important;
-  } */
-
   #resume-preview,
   #resume-preview * {
     visibility: visible;

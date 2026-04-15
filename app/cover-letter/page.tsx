@@ -23,86 +23,97 @@ import {
   Filter,
   MoreHorizontal,
   Sparkles,
-  Palette,
-  Layout,
+  Mail,
+  PenTool,
+  Target,
   Zap,
 } from "lucide-react";
 
-export default function ResumePage() {
+export default function CoverLetterPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState("all");
 
-  const resumes = [
+  const coverLetters = [
     {
       id: "1",
-      name: "Software Engineer Resume",
+      name: "Software Engineer Cover Letter",
       template: "Professional",
+      jobTitle: "Senior Frontend Developer",
+      company: "TechCorp Solutions",
       lastModified: "2024-01-20",
       createdAt: "2024-01-15",
       status: "completed",
-      views: 45,
-      downloads: 12,
+      views: 32,
+      downloads: 8,
       isFavorite: true,
-      thumbnail: "📄",
-      description: "Optimized for tech industry positions",
+      thumbnail: "✉️",
+      description: "Tailored for tech industry positions",
       tags: ["Software", "Engineering", "Tech"],
     },
     {
       id: "2",
-      name: "Marketing Manager CV",
+      name: "Marketing Manager Letter",
       template: "Creative",
+      jobTitle: "Marketing Director",
+      company: "Creative Agency",
       lastModified: "2024-01-18",
       createdAt: "2024-01-10",
       status: "draft",
-      views: 23,
-      downloads: 5,
+      views: 18,
+      downloads: 3,
       isFavorite: false,
-      thumbnail: "🎨",
-      description: "Creative design for marketing roles",
-      tags: ["Marketing", "Creative", "Management"],
+      thumbnail: "📝",
+      description: "Creative approach for marketing roles",
+      tags: ["Marketing", "Creative", "Leadership"],
     },
     {
       id: "3",
-      name: "Data Scientist Resume",
+      name: "Data Scientist Cover Letter",
       template: "Modern",
+      jobTitle: "Senior Data Scientist",
+      company: "DataTech Inc",
       lastModified: "2024-01-22",
       createdAt: "2024-01-08",
       status: "completed",
-      views: 67,
-      downloads: 18,
+      views: 45,
+      downloads: 12,
       isFavorite: true,
       thumbnail: "📊",
-      description: "Data-focused resume with analytics emphasis",
-      tags: ["Data Science", "Analytics", "Python"],
+      description: "Data-focused with analytical emphasis",
+      tags: ["Data Science", "Analytics", "Research"],
     },
     {
       id: "4",
-      name: "Product Manager Resume",
+      name: "Product Manager Letter",
       template: "Executive",
+      jobTitle: "VP of Product",
+      company: "StartupHub",
       lastModified: "2024-01-19",
       createdAt: "2024-01-05",
       status: "completed",
-      views: 34,
-      downloads: 8,
+      views: 28,
+      downloads: 6,
       isFavorite: false,
       thumbnail: "💼",
-      description: "Executive-level product management resume",
-      tags: ["Product", "Management", "Strategy"],
+      description: "Executive-level product management",
+      tags: ["Product", "Strategy", "Leadership"],
     },
     {
       id: "5",
-      name: "UX Designer Portfolio Resume",
+      name: "UX Designer Letter",
       template: "Creative",
+      jobTitle: "Senior UX Designer",
+      company: "Design Studio Pro",
       lastModified: "2024-01-21",
       createdAt: "2024-01-12",
       status: "draft",
-      views: 28,
-      downloads: 3,
+      views: 22,
+      downloads: 2,
       isFavorite: false,
-      thumbnail: "🎯",
-      description: "Visual portfolio-style resume for designers",
-      tags: ["UX Design", "Portfolio", "Creative"],
+      thumbnail: "🎨",
+      description: "Design-focused cover letter",
+      tags: ["UX Design", "Creative", "Portfolio"],
     },
   ];
 
@@ -110,15 +121,15 @@ export default function ResumePage() {
     {
       id: "professional",
       name: "Professional",
-      description: "Clean and traditional design",
-      preview: "🏢",
+      description: "Traditional business format",
+      preview: "💼",
       color: "from-blue-500 to-blue-600",
       isPremium: false,
     },
     {
       id: "modern",
       name: "Modern",
-      description: "Contemporary and stylish",
+      description: "Contemporary and clean",
       preview: "✨",
       color: "from-purple-500 to-pink-500",
       isPremium: false,
@@ -126,7 +137,7 @@ export default function ResumePage() {
     {
       id: "creative",
       name: "Creative",
-      description: "Bold and artistic layout",
+      description: "Unique and expressive",
       preview: "🎨",
       color: "from-orange-500 to-red-500",
       isPremium: true,
@@ -134,18 +145,19 @@ export default function ResumePage() {
     {
       id: "executive",
       name: "Executive",
-      description: "Sophisticated and elegant",
+      description: "Formal and sophisticated",
       preview: "👔",
       color: "from-gray-600 to-gray-800",
       isPremium: true,
     },
   ];
 
-  const filteredResumes = resumes.filter(resume => {
-    const matchesSearch = resume.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         resume.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         resume.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesTemplate = selectedTemplate === "all" || resume.template.toLowerCase() === selectedTemplate.toLowerCase();
+  const filteredCoverLetters = coverLetters.filter(letter => {
+    const matchesSearch = letter.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         letter.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         letter.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         letter.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesTemplate = selectedTemplate === "all" || letter.template.toLowerCase() === selectedTemplate.toLowerCase();
     return matchesSearch && matchesTemplate;
   });
 
@@ -161,12 +173,12 @@ export default function ResumePage() {
   };
 
   const stats = {
-    total: resumes.length,
-    completed: resumes.filter(r => r.status === "completed").length,
-    drafts: resumes.filter(r => r.status === "draft").length,
-    favorites: resumes.filter(r => r.isFavorite).length,
-    totalViews: resumes.reduce((sum, r) => sum + r.views, 0),
-    totalDownloads: resumes.reduce((sum, r) => sum + r.downloads, 0),
+    total: coverLetters.length,
+    completed: coverLetters.filter(l => l.status === "completed").length,
+    drafts: coverLetters.filter(l => l.status === "draft").length,
+    favorites: coverLetters.filter(l => l.isFavorite).length,
+    totalViews: coverLetters.reduce((sum, l) => sum + l.views, 0),
+    totalDownloads: coverLetters.reduce((sum, l) => sum + l.downloads, 0),
   };
 
   return (
@@ -177,27 +189,27 @@ export default function ResumePage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center">
-                  <FileText className="h-4 w-4 text-white" />
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 flex items-center justify-center">
+                  <Mail className="h-4 w-4 text-white" />
                 </div>
-                <span className="font-bold text-xl">ResumeBuilder</span>
+                <span className="font-bold text-xl">CoverLetterBuilder</span>
               </Link>
               <div className="hidden md:flex gap-6">
-                <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600 transition">
+                <Link href="/dashboard" className="text-gray-600 hover:text-teal-600 transition">
                   Dashboard
                 </Link>
-                <Link href="/resume" className="text-indigo-600 font-semibold">
+                <Link href="/resume" className="text-gray-600 hover:text-teal-600 transition">
                   Resumes
                 </Link>
-                <Link href="/cover-letter" className="text-gray-600 hover:text-indigo-600 transition">
+                <Link href="/cover-letter" className="text-teal-600 font-semibold">
                   Cover Letters
                 </Link>
               </div>
             </div>
             <div className="flex gap-3">
-              <Button onClick={() => router.push("/dashboard/resume/new")}>
+              <Button onClick={() => router.push("/dashboard/coverLetter/new")}>
                 <Plus className="h-4 w-4 mr-2" />
-                Create Resume
+                Create Cover Letter
               </Button>
             </div>
           </div>
@@ -205,37 +217,37 @@ export default function ResumePage() {
       </nav>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 py-12">
+      <div className="bg-gradient-to-r from-teal-600 to-cyan-600 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white mb-4">
-              Your Resume Collection
+              Your Cover Letter Collection
             </h1>
-            <p className="text-indigo-100 text-lg mb-8">
-              Create, manage, and optimize your professional resumes
+            <p className="text-teal-100 text-lg mb-8">
+              Craft compelling cover letters that get you noticed
             </p>
             
             {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <div className="text-2xl font-bold text-white">{stats.total}</div>
-                <div className="text-sm text-indigo-100">Total Resumes</div>
+                <div className="text-sm text-teal-100">Total Letters</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <div className="text-2xl font-bold text-white">{stats.completed}</div>
-                <div className="text-sm text-indigo-100">Completed</div>
+                <div className="text-sm text-teal-100">Completed</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <div className="text-2xl font-bold text-white">{stats.drafts}</div>
-                <div className="text-sm text-indigo-100">Drafts</div>
+                <div className="text-sm text-teal-100">Drafts</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <div className="text-2xl font-bold text-white">{stats.totalViews}</div>
-                <div className="text-sm text-indigo-100">Total Views</div>
+                <div className="text-sm text-teal-100">Total Views</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <div className="text-2xl font-bold text-white">{stats.totalDownloads}</div>
-                <div className="text-sm text-indigo-100">Downloads</div>
+                <div className="text-sm text-teal-100">Downloads</div>
               </div>
             </div>
           </div>
@@ -244,20 +256,20 @@ export default function ResumePage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs defaultValue="my-resumes" className="space-y-6">
+        <Tabs defaultValue="my-letters" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="my-resumes">My Resumes ({stats.total})</TabsTrigger>
+            <TabsTrigger value="my-letters">My Cover Letters ({stats.total})</TabsTrigger>
             <TabsTrigger value="templates">Templates</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="my-resumes" className="space-y-6">
+          <TabsContent value="my-letters" className="space-y-6">
             {/* Search and Filters */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Search resumes..."
+                    placeholder="Search cover letters..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
@@ -282,37 +294,37 @@ export default function ResumePage() {
               </div>
             </div>
 
-            {/* Resumes Grid */}
-            {filteredResumes.length === 0 ? (
+            {/* Cover Letters Grid */}
+            {filteredCoverLetters.length === 0 ? (
               <Card>
                 <CardContent className="text-center py-12">
-                  <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No resumes found</h3>
+                  <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No cover letters found</h3>
                   <p className="text-gray-600 mb-4">
                     {searchQuery || selectedTemplate !== "all" 
                       ? "Try adjusting your search or filters"
-                      : "Create your first resume to get started"
+                      : "Create your first cover letter to get started"
                     }
                   </p>
-                  <Button onClick={() => router.push("/dashboard/resume/new")}>
+                  <Button onClick={() => router.push("/dashboard/coverLetter/new")}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Create Your First Resume
+                    Create Your First Cover Letter
                   </Button>
                 </CardContent>
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredResumes.map((resume) => (
-                  <Card key={resume.id} className="hover:shadow-lg transition-shadow group">
+                {filteredCoverLetters.map((letter) => (
+                  <Card key={letter.id} className="hover:shadow-lg transition-shadow group">
                     <CardHeader className="pb-3">
                       <div className="flex justify-between items-start">
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl">
-                            {resume.thumbnail}
+                            {letter.thumbnail}
                           </div>
                           <div>
-                            <CardTitle className="text-lg">{resume.name}</CardTitle>
-                            <CardDescription>{resume.template}</CardDescription>
+                            <CardTitle className="text-lg">{letter.name}</CardTitle>
+                            <CardDescription>{letter.template}</CardDescription>
                           </div>
                         </div>
                         <Button
@@ -320,16 +332,21 @@ export default function ResumePage() {
                           size="sm"
                           className="opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          <Star className={`h-4 w-4 ${resume.isFavorite ? "fill-current text-yellow-500" : ""}`} />
+                          <Star className={`h-4 w-4 ${letter.isFavorite ? "fill-current text-yellow-500" : ""}`} />
                         </Button>
                       </div>
                     </CardHeader>
                     
                     <CardContent className="space-y-4">
-                      <p className="text-sm text-gray-600 line-clamp-2">{resume.description}</p>
+                      <div className="text-sm text-gray-600">
+                        <div className="font-medium">{letter.jobTitle}</div>
+                        <div className="text-gray-500">{letter.company}</div>
+                      </div>
+                      
+                      <p className="text-sm text-gray-600 line-clamp-2">{letter.description}</p>
                       
                       <div className="flex flex-wrap gap-1">
-                        {resume.tags.map((tag, idx) => (
+                        {letter.tags.map((tag, idx) => (
                           <Badge key={idx} variant="secondary" className="text-xs">
                             {tag}
                           </Badge>
@@ -339,16 +356,16 @@ export default function ResumePage() {
                       <div className="flex items-center justify-between text-sm text-gray-500">
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          {resume.lastModified}
+                          {letter.lastModified}
                         </span>
-                        <Badge className={getStatusColor(resume.status)}>
-                          {resume.status}
+                        <Badge className={getStatusColor(letter.status)}>
+                          {letter.status}
                         </Badge>
                       </div>
                       
                       <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>{resume.views} views</span>
-                        <span>{resume.downloads} downloads</span>
+                        <span>{letter.views} views</span>
+                        <span>{letter.downloads} downloads</span>
                       </div>
                       
                       <div className="flex gap-2 pt-2">
@@ -376,7 +393,7 @@ export default function ResumePage() {
           <TabsContent value="templates" className="space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Choose a Template</h2>
-              <p className="text-gray-600">Select from our collection of professional resume templates</p>
+              <p className="text-gray-600">Select from our collection of professional cover letter templates</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -399,16 +416,16 @@ export default function ResumePage() {
                   <CardContent className="space-y-4">
                     <div className="text-sm text-gray-600 space-y-1">
                       <div className="flex items-center gap-2">
-                        <Layout className="h-4 w-4" />
-                        <span>Professional Layout</span>
+                        <PenTool className="h-4 w-4" />
+                        <span>Professional Writing</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Palette className="h-4 w-4" />
-                        <span>Customizable Colors</span>
+                        <Target className="h-4 w-4" />
+                        <span>Job-Specific Content</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Zap className="h-4 w-4" />
-                        <span>ATS Optimized</span>
+                        <span>AI-Powered Suggestions</span>
                       </div>
                     </div>
                     
