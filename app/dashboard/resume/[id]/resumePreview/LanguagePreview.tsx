@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { ResumeData } from "@/types/resume";
 import React from "react";
-import { resumeTemplates } from "../page";
+import { resumeTemplates } from "../../page";
 
 export default function LanguagePreview({
   data,

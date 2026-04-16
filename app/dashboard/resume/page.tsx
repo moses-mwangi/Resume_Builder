@@ -43,12 +43,12 @@ import {
 } from "@/types/resume";
 import { PDFExporter } from "./PDFExporter";
 import { HeaderStyle, HeaderStyleSelector, ResumeHeader } from "./ResumeHeader";
-import CertificatePreview from "./resumePreview/CertificatePreview";
-import EducationPreview from "./resumePreview/EducationPreview";
-import ExperiencePreview from "./resumePreview/ExperiencePreview";
-import LanguagePreview from "./resumePreview/LanguagePreview";
-import ProjectsPreview from "./resumePreview/ProjectsPreview";
-import SkillsPreview from "./resumePreview/SkillsPreview";
+import CertificatePreview from "./[id]/resumePreview/CertificatePreview";
+import EducationPreview from "./[id]/resumePreview/EducationPreview";
+import ExperiencePreview from "./[id]/resumePreview/ExperiencePreview";
+import LanguagePreview from "./[id]/resumePreview/LanguagePreview";
+import ProjectsPreview from "./[id]/resumePreview/ProjectsPreview";
+import SkillsPreview from "./[id]/resumePreview/SkillsPreview";
 import SidebarNav from "./Shared-SideNav";
 
 export const resumeTemplates = {

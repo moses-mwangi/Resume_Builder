@@ -2,7 +2,7 @@
 
 import { Separator } from "@/components/ui/separator";
 import { ResumeData, Skill } from "@/types/resume";
-import { resumeTemplates } from "../page";
+import { resumeTemplates } from "../../page";
 import { Code, Icon } from "lucide-react";
 import React, { useState } from "react";
 
@@ -76,7 +76,7 @@ export default function SkillsPreview({
                         {category}
                       </h3>
                       <span className="text-xs text-gray-400">
-                        ({categorySkills.length})888
+                        ({categorySkills.length})
                       </span>
                     </div>
 

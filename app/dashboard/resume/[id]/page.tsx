@@ -50,16 +50,17 @@ import {
   HeaderStyleSelector,
   ResumeHeader,
 } from "../ResumeHeader";
-import CertificatePreview from "../resumePreview/CertificatePreview";
-import EducationPreview from "../resumePreview/EducationPreview";
-import ExperiencePreview from "../resumePreview/ExperiencePreview";
-import LanguagePreview from "../resumePreview/LanguagePreview";
-import ProjectsPreview from "../resumePreview/ProjectsPreview";
-import SkillsPreview from "../resumePreview/SkillsPreview";
+import CertificatePreview from "./resumePreview/CertificatePreview";
+import EducationPreview from "./resumePreview/EducationPreview";
+import ExperiencePreview from "./resumePreview/ExperiencePreview";
+import LanguagePreview from "./resumePreview/LanguagePreview";
+import ProjectsPreview from "./resumePreview/ProjectsPreview";
+import SkillsPreview from "./resumePreview/SkillsPreview";
 import SidebarNav from "../Shared-SideNav";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { resume } from "react-dom/server";
+import { ClickableElement } from "./ClickableElement";
 
 export const resumeTemplates = {
   modern: {
@@ -159,7 +160,6 @@ const LivePreview = ({
       className="bg-white overflow-hidden no-scrollbar"
       style={{ fontFamily: style?.font }}
     >
-      {/* <div className="px-9 py-7"> */}
       <div className="">
         <Separator />
         <ResumeHeader
@@ -167,12 +167,14 @@ const LivePreview = ({
           style={headerStyle}
           primaryColor={style.primaryColor}
         />
-        <h2
+
+        <h1
+          id="linkedin-link"
           className="text-lg font-semibold pb-1"
           style={{ borderColor: style.secondaryColor }}
         >
           Professional Summary
-        </h2>
+        </h1>
         <Separator className="h-px mb-4" />
         <div className="mb-6">
           <div
@@ -586,23 +588,165 @@ export default function ResumeBuilder() {
   const exportToPDF = async () => {
     if (!previewRef.current) return;
     setIsExporting(true);
+
     try {
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
       });
+
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
       });
+
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-      pdf.save(
-        `resume-${resumeData?.personalInfo?.fullName || "document"}.pdf`,
+      const marginLeft = 10;
+      const marginTop = 10;
+
+      pdf.addImage(imgData, "PNG", marginLeft, marginTop, imgWidth, imgHeight);
+
+      // Improved position calculation
+      const clickableElements = previewRef.current.querySelectorAll(
+        '[data-clickable="true"]',
       );
+
+      clickableElements.forEach((element) => {
+        const url = element.getAttribute("data-url");
+        if (!url) return;
+
+        // Get the exact position relative to the preview container
+        const getElementPosition = (el: any) => {
+          let rect = el.getBoundingClientRect();
+          let previewRect = previewRef?.current?.getBoundingClientRect();
+
+          // Calculate scroll offsets
+          let scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+          let scrollLeft =
+            window.pageXOffset || document.documentElement.scrollLeft;
+
+          // Get computed styles to account for transforms
+          const style = window.getComputedStyle(el);
+          const transform = style.transform;
+
+          let x = rect.left - (previewRect as DOMRect).left;
+          let y = rect.top - (previewRect as DOMRect).top;
+
+          // Adjust for any CSS transforms
+          if (transform && transform !== "none") {
+            const matrix = transform.match(/matrix.*\((.+)\)/);
+            if (matrix) {
+              const values = matrix[1].split(", ");
+              const tx = parseFloat(values[4] || String(0));
+              const ty = parseFloat(values[5] || String(0));
+              x += tx;
+              y += ty;
+            }
+          }
+
+          // Convert to mm (1px = 0.264583mm)
+          const pxToMm = (px: number) => px * 0.264583;
+
+          return {
+            x: pxToMm(x),
+            y: pxToMm(y),
+            width: pxToMm(rect.width),
+            height: pxToMm(rect.height),
+          };
+        };
+
+        const pos = getElementPosition(element);
+
+        if (pos.width > 0 && pos.height > 0) {
+          pdf.link(
+            marginLeft + pos.x,
+            marginTop + pos.y,
+            pos.width,
+            pos.height,
+            { url: url },
+          );
+        }
+      });
+
+      pdf.save(`resume-${resumeData.personalInfo.fullName || "document"}.pdf`);
+      setExportSuccess(true);
+      setTimeout(() => setExportSuccess(false), 3000);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const exportToPDFd = async () => {
+    if (!previewRef.current) return;
+    setIsExporting(true);
+
+    try {
+      const canvas = await html2canvas(previewRef.current, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const imgWidth = 190;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const marginLeft = 10;
+      const marginTop = 10;
+
+      pdf.addImage(imgData, "PNG", marginLeft, marginTop, imgWidth, imgHeight);
+
+      // Track ALL elements with data-clickable attribute
+      const clickableElements = previewRef.current.querySelectorAll(
+        '[data-clickable="true"]',
+      );
+
+      console.log(`Found ${clickableElements.length} clickable elements`); // Debug
+
+      clickableElements.forEach((element) => {
+        const url = element.getAttribute("data-url");
+        if (!url) {
+          console.warn(
+            "Element has data-clickable but no data-url:",
+            element.id,
+          );
+          return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        const previewRect = previewRef?.current?.getBoundingClientRect();
+
+        const pxToMm = (px: number) => px * 0.264583;
+
+        const x = pxToMm(rect.left - (previewRect as DOMRect)?.left);
+        const y = pxToMm(rect.top - (previewRect as DOMRect).top);
+        const width = pxToMm(rect.width);
+        const height = pxToMm(rect.height);
+
+        console.log(`Adding clickable area for ${element.id}:`, {
+          x,
+          y,
+          width,
+          height,
+          url,
+        });
+
+        if (width > 0 && height > 0) {
+          pdf.link(marginLeft + x, marginTop + y, width, height, { url: url });
+        }
+      });
+
+      pdf.save(`resume-${resumeData.personalInfo.fullName || "document"}.pdf`);
       setExportSuccess(true);
       setTimeout(() => setExportSuccess(false), 3000);
     } catch (error) {
@@ -840,7 +984,8 @@ export default function ResumeBuilder() {
                 <Card className="sticky px-8 py-7 rounded-l-lg border-gray-200">
                   <div
                     ref={previewRef}
-                    className="bg-white/90 h-[calc(100vh-130px)] no-scrollbar overflow-auto"
+                    // className="bg-white/90 h-[calc(100vh-130px)] no-scrollbar overflow-auto"
+                    className="bg-white/90 no-scrollbar overflow-auto"
                   >
                     <LivePreview
                       data={resumeData}
@@ -852,7 +997,6 @@ export default function ResumeBuilder() {
               ) : (
                 <Card className="p-6 shadow-lg border-gray-200 ">
                   <ScrollArea className="max-h-[calc(100vh-100px)] h-[calc(100vh-100px)] pr-4">
-                    {/* <ScrollArea className="max-h-[calc(100vh-100px)] min-h-[calc(100vh-300px)] pr-4"> */}
                     {renderSection()}
                   </ScrollArea>
                 </Card>
