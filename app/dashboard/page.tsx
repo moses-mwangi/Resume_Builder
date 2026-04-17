@@ -288,7 +288,6 @@ export default function DashboardPage() {
   const [currentType, setCurrentType] = useState<"resume" | "cover">("resume");
   const [currentItem, setCurrentItem] = useState<any>(null);
 
-  // Check authentication and load user data
   useEffect(() => {
     const currentUser = auth.getCurrentUser();
     if (!currentUser) {
@@ -563,13 +562,20 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Link href="/pricing">
-            <Button variant="outline" className="gap-2">
-              <CreditCard className="h-4 w-4" />
-              Pricing
+          <Link href="/dashboard/resume-matcher">
+            <Button
+              variant="outline"
+              // onClick={() => {}}
+              className="w-full cursor-pointer px-3 py-1.5 text-left text-xs hover:bg-gray-50 flex items-center gap-2 transition"
+            >
+              <span className="text-sm">🎯</span> Match Score
             </Button>
           </Link>
-          <Button variant="outline" onClick={handleLogout} className="gap-2">
+          <Button
+            variant="outline"
+            onClick={handleLogout}
+            className="gap-2 cursor-pointer"
+          >
             <LogOut className="h-4 w-4" />
             Logout
           </Button>
