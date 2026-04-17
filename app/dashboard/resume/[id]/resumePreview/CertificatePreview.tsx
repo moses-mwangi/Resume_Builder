@@ -26,7 +26,7 @@ export default function CertificatePreview({
             {data.certificates.map((cert) => (
               <div key={cert.id} className="flex justify-between items-start">
                 <div>
-                  <p className="font-medium">{cert.name}</p>
+                  <p className="font-medium text-blue-600">{cert.name}</p>
                   <p className="text-sm text-gray-600">{cert.issuer}</p>
                 </div>
                 <div className="text-right text-sm text-gray-500">

@@ -334,3 +334,8 @@
     width: 100%;
   }
 }
+
+.break-after {
+  break-after: page;
+  page-break-after: always; /* Fallback */
+}

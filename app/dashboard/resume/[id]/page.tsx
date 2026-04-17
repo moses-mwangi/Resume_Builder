@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-// import html2canvas from "html2canvas";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import {
@@ -586,6 +585,34 @@ export default function ResumeBuilder() {
   };
 
   const exportToPDF = async () => {
+    if (!previewRef.current) return;
+    setIsExporting(true);
+
+    try {
+      const html2pdf = (await import("html2pdf.js")).default;
+      const options = {
+        margin: 0.5,
+        filename: "my-document.pdf",
+        image: { type: "jpeg" as const, quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "a4", orientation: "portrait" as const },
+        pagebreak: { mode: ["css", "legacy"] } as any,
+      };
+
+      const canvas = await html2canvas(previewRef?.current, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+      });
+
+      await html2pdf().set(options).from(canvas).save();
+    } catch (error) {
+      console.error("PDF Export Error:", error);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const exportToPDFs = async () => {
     if (!previewRef.current) return;
     setIsExporting(true);
 

@@ -32,7 +32,7 @@ export default function EducationPreview({
                   >
                     {edu.institution}
                   </h3>
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 text-[15px]">
                     {edu.degree} in {edu.field}
                   </p>
                 </div>
