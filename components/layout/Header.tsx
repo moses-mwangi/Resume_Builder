@@ -143,17 +143,19 @@ import {
   Sparkles,
   Briefcase,
   Award,
+  CheckCircle,
+  Send,
 } from "lucide-react";
 
 export default function Header() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<any | null>(() => auth.getCurrentUser());
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  // Check authentication and load user data
   useEffect(() => {
     const currentUser = auth.getCurrentUser();
     if (currentUser) {
@@ -214,16 +216,17 @@ export default function Header() {
   return (
     <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
       <div className="flex justify-between items-center px-4 md:px-6 py-3 max-w-7xl mx-auto">
-        {/* Logo */}
         <Link
           href={user ? "/" : "/"}
           className="flex items-center gap-2 group cursor-pointer"
         >
           <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
-            <Sparkles className="h-4 w-4 text-white" />
+            <span className="text-white text-sm font-semibold tracking-tight">
+              HF
+            </span>
           </div>
           <h1 className="font-bold text-xl bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            AI Resume Builder
+            HireFlow
           </h1>
         </Link>
 
@@ -231,12 +234,92 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           {user ? (
             <>
-              <Link
+              <>
+                <Link
+                  href="/dashboard"
+                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
+                >
+                  <LayoutDashboard className="h-3.5 w-3.5" />
+                  Dashboard
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </Link>
+                <Link
+                  href="/dashboard/resume"
+                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  Resume
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </Link>
+
+                {/* ATS Checker */}
+                <Link
+                  href="/dashboard/ats-checker"
+                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+                >
+                  <CheckCircle className="h-4 w-4" />
+                  ATS Checker
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </Link>
+
+                {/* Job Matcher */}
+                <Link
+                  href="/dashboard/job-matcher"
+                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+                >
+                  <Briefcase className="h-4 w-4" />
+                  Job Matcher
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </Link>
+
+                {/* <Link
+                  href="/dashboard/applications"
+                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+                >
+                  <Send className="h-4 w-4" />
+                  Applications
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </Link> */}
+
+                <Link
+                  href="/pricing"
+                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+                >
+                  <CreditCard className="h-4 w-4" />
+                  Pricing
+                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </Link>
+              </>
+              {/* <Link
                 href="/dashboard"
                 className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
               >
                 <LayoutDashboard className="h-3.5 w-3.5" />
                 Dashboard
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </Link>
+              <Link
+                href="/dashboard"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
+              >
+                <LayoutDashboard className="h-3.5 w-3.5" />
+                ATS Checker
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </Link>
+              <Link
+                href="/dashboard/resume-matcher"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
+              >
+                <CreditCard className="h-3.5 w-3.5" />
+                Job Matcher
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </Link>
+              <Link
+                href="/dashboard"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
+              >
+                <LayoutDashboard className="h-3.5 w-3.5" />
+                Application
                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </Link>
               <Link
@@ -246,7 +329,7 @@ export default function Header() {
                 <CreditCard className="h-3.5 w-3.5" />
                 Pricing
                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </Link>
+              </Link> */}
             </>
           ) : (
             <>
@@ -281,7 +364,7 @@ export default function Header() {
                 >
                   {getInitials(user.name)}
                 </div>
-                <div className="text-left hidden lg:block">
+                {/* <div className="text-left hidden lg:block">
                   <p className="text-sm font-semibold text-gray-800">
                     {user.name.split(" ")[0]}
                   </p>
@@ -291,7 +374,7 @@ export default function Header() {
                   className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${
                     isProfileOpen ? "rotate-180" : ""
                   }`}
-                />
+                /> */}
               </button>
 
               {/* Dropdown Menu */}
