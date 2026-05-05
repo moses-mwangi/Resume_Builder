@@ -1,130 +1,3 @@
-// "use client";
-
-// import { auth } from "@/lib/auth";
-// import Link from "next/link";
-// import { useRouter } from "next/navigation";
-// import React, { useEffect, useState } from "react";
-
-// export default function Header() {
-//   const router = useRouter();
-//   const [user, setUser] = useState<any>(null);
-
-//   // Check authentication and load user data
-//   useEffect(() => {
-//     const currentUser = auth.getCurrentUser();
-//     if (!currentUser) {
-//       router.push("/auth/login");
-//     } else if (!currentUser.onboardingCompleted) {
-//       router.push("/onboarding");
-//     } else {
-//       setUser(currentUser);
-//     }
-//   }, [router]);
-
-//   return (
-//     <div>
-//       <div className="flex justify-between items-center px-6 py-4 max-w-6xl mx-auto">
-//         <Link
-//           href={`/`}
-//           className="flex items-center gap-2 group cursor-pointer"
-//         >
-//           <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
-//             <span className="text-white font-bold text-sm">AI</span>
-//           </div>
-//           <h1 className="font-bold text-xl bg-linear-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-//             AI Resume Builder
-//           </h1>
-//         </Link>
-
-//         {/* Desktop Navigation */}
-//         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-//           <Link
-//             href="#demo"
-//             className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group"
-//           >
-//             Demo
-//             <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-//           </Link>
-
-//           <Link
-//             href="#preview"
-//             className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group"
-//           >
-//             Preview
-//             <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-//           </Link>
-
-//           <Link
-//             href="#features"
-//             className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group"
-//           >
-//             Features
-//             <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-//           </Link>
-//           <div>
-//             {user ? (
-//               <div>
-//                 <p>{user.name}</p>
-//               </div>
-//             ) : (
-//               <a
-//                 href="/auth/login"
-//                 className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-5 py-2.5 rounded-lg font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 active:scale-95"
-//               >
-//                 Get Started
-//               </a>
-//             )}
-//           </div>
-//         </nav>
-
-//         {/* Mobile Menu Button */}
-//         <button className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-//           <svg
-//             className="w-6 h-6 text-gray-600"
-//             fill="none"
-//             stroke="currentColor"
-//             viewBox="0 0 24 24"
-//           >
-//             <path
-//               strokeLinecap="round"
-//               strokeLinejoin="round"
-//               strokeWidth={2}
-//               d="M4 6h16M4 12h16M4 18h16"
-//             />
-//           </svg>
-//         </button>
-//       </div>
-
-//       {/* Optional: Mobile Menu (hidden by default, can be toggled) */}
-//       <div className="md:hidden hidden">
-//         <nav className="flex flex-col gap-4 px-6 py-4 bg-white border-t border-gray-100">
-//           <Link href="#demo" className="text-gray-600 hover:text-blue-600 py-2">
-//             Demo
-//           </Link>
-//           <Link
-//             href="#preview"
-//             className="text-gray-600 hover:text-blue-600 py-2"
-//           >
-//             Preview
-//           </Link>
-//           <Link
-//             href="#features"
-//             className="text-gray-600 hover:text-blue-600 py-2"
-//           >
-//             Features
-//           </Link>
-//           <a
-//             href="/dashboard"
-//             className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-center"
-//           >
-//             Get Started
-//           </a>
-//         </nav>
-//       </div>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { auth } from "@/lib/auth";
@@ -149,14 +22,17 @@ import {
 
 export default function Header() {
   const router = useRouter();
-  // const [user, setUser] = useState<any | null>(null);
-  const [user, setUser] = useState<any | null>(() => auth.getCurrentUser());
+  const [user, setUser] = useState<any | null>(null);
+  // const [user, setUser] = useState<any | null>(() => auth.getCurrentUser());
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     const currentUser = auth.getCurrentUser();
     if (currentUser) {
       setUser(currentUser);
@@ -213,6 +89,8 @@ export default function Header() {
     return gradients[index];
   };
 
+  if (!mounted) return null;
+
   return (
     <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
       <div className="flex justify-between items-center px-4 md:px-6 py-3 max-w-7xl mx-auto">
@@ -234,45 +112,44 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           {user ? (
             <>
-              <>
-                <Link
-                  href="/dashboard"
-                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
-                >
-                  <LayoutDashboard className="h-3.5 w-3.5" />
-                  Dashboard
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </Link>
-                <Link
-                  href="/dashboard/resume"
-                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
-                >
-                  <FileText className="h-4 w-4" />
-                  Resume
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </Link>
+              <Link
+                href="/dashboard"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </Link>
+              <Link
+                href="/dashboard/resume"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                Resume
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </Link>
 
-                {/* ATS Checker */}
-                <Link
-                  href="/dashboard/ats-checker"
-                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
-                >
-                  <CheckCircle className="h-4 w-4" />
-                  ATS Checker
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </Link>
+              {/* ATS Checker */}
+              <Link
+                href="/dashboard/ats-checker"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+              >
+                <CheckCircle className="h-4 w-4" />
+                ATS Checker
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </Link>
 
-                {/* Job Matcher */}
-                <Link
-                  href="/dashboard/job-matcher"
-                  className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
-                >
-                  <Briefcase className="h-4 w-4" />
-                  Job Matcher
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </Link>
+              {/* Job Matcher */}
+              <Link
+                href="/dashboard/job-matcher"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
+              >
+                <Briefcase className="h-4 w-4" />
+                Job Matcher
+                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </Link>
 
-                {/* <Link
+              {/* <Link
                   href="/dashboard/applications"
                   className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
                 >
@@ -281,55 +158,14 @@ export default function Header() {
                   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                 </Link> */}
 
-                <Link
+              {/* <Link
                   href="/pricing"
                   className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-2"
                 >
                   <CreditCard className="h-4 w-4" />
                   Pricing
                   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                </Link>
-              </>
-              {/* <Link
-                href="/dashboard"
-                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
-              >
-                <LayoutDashboard className="h-3.5 w-3.5" />
-                Dashboard
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </Link>
-              <Link
-                href="/dashboard"
-                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
-              >
-                <LayoutDashboard className="h-3.5 w-3.5" />
-                ATS Checker
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </Link>
-              <Link
-                href="/dashboard/resume-matcher"
-                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
-              >
-                <CreditCard className="h-3.5 w-3.5" />
-                Job Matcher
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </Link>
-              <Link
-                href="/dashboard"
-                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
-              >
-                <LayoutDashboard className="h-3.5 w-3.5" />
-                Application
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </Link>
-              <Link
-                href="/pricing"
-                className="relative text-gray-600 hover:text-blue-600 transition-colors duration-200 group flex items-center gap-1"
-              >
-                <CreditCard className="h-3.5 w-3.5" />
-                Pricing
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              </Link> */}
+                </Link> */}
             </>
           ) : (
             <>
