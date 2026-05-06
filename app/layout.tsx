@@ -10,9 +10,39 @@ const inter = Inter({ subsets: ["latin"] });
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Resume Builder - Create Your Professional CV",
+  // title: "Resume Builder - Create Your Professional CV",
+  title: "HireFlow Resume Builder - Create Your Professional CV",
   description:
     "A unique, interactive resume builder with modern design and PDF export",
+  keywords: [
+    "Moses Mwangi CV",
+    "Full Stack Developer Resume",
+    "AI Engineer Resume",
+    "React Developer CV",
+    "Software Engineer Resume",
+  ],
+  icons: {
+    icon: [
+      {
+        url: "/HF.png",
+        sizes: "any",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/HF.png",
+        sizes: "32x32",
+        type: "image/x-icon",
+      },
+    ],
+    shortcut: "/HF.png",
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
