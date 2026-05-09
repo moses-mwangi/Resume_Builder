@@ -1,22 +1,15 @@
 "use client";
 
-import { ResumeData } from "@/types/resume";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { initialResumeData } from "./resume/page";
-import { CoverLetterData } from "@/types/letter";
-import { initialLetterData } from "./coverLetter/page";
-import { auth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import {
-  LogOut,
-  CreditCard,
-  Plus,
-  FileText,
-  Mail,
-  LayoutDashboard,
-} from "lucide-react";
+import { auth } from "@/lib/auth";
+import { CoverLetterData } from "@/types/letter";
+import { ResumeData } from "@/types/resume";
+import { FileText, LayoutDashboard, LogOut, Mail, Plus } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { initialLetterData } from "./coverLetter/page";
+import { initialResumeData } from "./resume/page";
 
 const CreateModal = ({
   isOpen,

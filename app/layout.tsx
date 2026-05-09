@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/layout/Header";
@@ -10,7 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  // title: "Resume Builder - Create Your Professional CV",
   title: "HireFlow Resume Builder - Create Your Professional CV",
   description:
     "A unique, interactive resume builder with modern design and PDF export",

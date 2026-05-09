@@ -19,10 +19,9 @@ import {
   GraduationCap,
   LucideLayoutGrid,
   RefreshCw,
+  Sparkles,
   User,
   Wrench,
-  ArrowLeft,
-  Sparkles,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -43,23 +42,20 @@ import {
   ResumeData,
   Skill,
 } from "@/types/resume";
-import { PDFExporter } from "../PDFExporter";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import {
   HeaderStyle,
   HeaderStyleSelector,
   ResumeHeader,
 } from "../ResumeHeader";
+import SidebarNav from "../Shared-SideNav";
 import CertificatePreview from "./resumePreview/CertificatePreview";
 import EducationPreview from "./resumePreview/EducationPreview";
 import ExperiencePreview from "./resumePreview/ExperiencePreview";
 import LanguagePreview from "./resumePreview/LanguagePreview";
 import ProjectsPreview from "./resumePreview/ProjectsPreview";
 import SkillsPreview from "./resumePreview/SkillsPreview";
-import SidebarNav from "../Shared-SideNav";
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { resume } from "react-dom/server";
-import { ClickableElement } from "./ClickableElement";
 
 export const resumeTemplates = {
   modern: {

@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { CoverLetterData } from "@/types/letter";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {
-  ArrowLeft,
   Building,
   CheckCircle,
   Download,
@@ -23,11 +23,9 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import SidebarNav from "../../resume/Shared-SideNav";
-import { CoverLetterData } from "@/types/letter";
 
 // Templates
 const letterTemplates = {

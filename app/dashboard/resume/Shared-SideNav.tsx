@@ -1,24 +1,17 @@
-import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
-import { cn } from "@/lib/utils"; // Adjust import based on your project
-import {
-  User,
-  Briefcase,
-  GraduationCap,
-  Wrench,
-  FolderOpen,
-  Award,
-  Globe,
-  FileText,
-  ChevronRight,
-  LayoutTemplate,
-  Save,
-  CheckCircle,
-  ChevronLeft,
-  Menu,
-  LucideProps,
-} from "lucide-react";
 import { Progress } from "@/components/ui/progress"; // Adjust import
 import { ScrollArea } from "@/components/ui/scroll-area"; // Adjust import
+import { cn } from "@/lib/utils"; // Adjust import based on your project
+import {
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  LayoutTemplate,
+  LucideProps,
+  Menu,
+  Save,
+} from "lucide-react";
+import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
 
 // Sidebar Navigation
 const SidebarNav = ({

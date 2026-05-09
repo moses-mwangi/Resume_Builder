@@ -565,40 +565,39 @@
 // components/FullResumeEditor.tsx
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
+import { ResumeData } from "@/types/resume";
 import { Color } from "@tiptap/extension-color";
-import { TextStyle } from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import {
-  Bold,
-  Italic,
-  Strikethrough,
-  Underline as UnderlineIcon,
-  AlignLeft,
   AlignCenter,
+  AlignLeft,
   AlignRight,
-  Palette,
-  Highlighter,
-  List,
-  ListOrdered,
-  Undo,
-  Redo,
+  Bold,
   Heading1,
   Heading2,
   Heading3,
+  Highlighter,
+  Italic,
+  List,
+  ListOrdered,
+  Palette,
+  Redo,
+  Strikethrough,
   Type,
+  Underline as UnderlineIcon,
+  Undo,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ResumeData } from "@/types/resume";
 // import { resumeTemplates } from "@/app/resume-builder/page";
 // import { HeaderStyle, ResumeHeader } from ".";
-import { Separator } from "@/components/ui/separator";
-import { HeaderStyle, ResumeHeader } from "../../ResumeHeader";
+import { HeaderStyle } from "../../ResumeHeader";
 import { resumeTemplates } from "../../page";
 
 // resumeTemplates

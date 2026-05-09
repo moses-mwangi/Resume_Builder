@@ -1,24 +1,19 @@
 "use client";
 
 import { auth } from "@/lib/auth";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState, useRef } from "react";
 import {
-  User,
-  Settings,
-  LogOut,
+  Briefcase,
+  CheckCircle,
   CreditCard,
   FileText,
-  Mail,
   LayoutDashboard,
-  ChevronDown,
-  Sparkles,
-  Briefcase,
-  Award,
-  CheckCircle,
-  Send,
+  LogOut,
+  Settings,
+  User,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export default function Header() {
   const router = useRouter();

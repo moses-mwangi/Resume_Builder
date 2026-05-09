@@ -2,18 +2,6 @@
 "use client";
 
 import {
-  Mail,
-  Phone,
-  MapPin,
-  Globe,
-  Linkedin,
-  Github,
-  Briefcase,
-  Calendar,
-} from "lucide-react";
-import { PersonalInfo } from "@/types/resume";
-import { Separator } from "../../../components/ui/separator";
-import {
   Select,
   SelectContent,
   SelectGroup,
@@ -22,6 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PersonalInfo } from "@/types/resume";
+import { Github, Globe, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Separator } from "../../../components/ui/separator";
 import { ClickableElement } from "./[id]/ClickableElement";
 
 export type HeaderStyle =
